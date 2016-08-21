@@ -2,6 +2,8 @@ import React from 'react';
 import { storiesOf, action} from '@kadira/storybook';
 import Select from './index.jsx';
 
+import '../_story.scss';
+
 import $ from 'jquery';
 window.$ = $;
 
@@ -39,5 +41,10 @@ storiesOf('Select', module)
         <div style={style}>
             <Select options={smallList} onChange={action('onChange') } inline={true} width={300} />
             <Select options={longList} onChange={action('onChange') } inline={true} width={300} />
+        </div>
+    ))
+    .add('Required', () => (
+        <div style={style}>
+            <Select options={longList} onChange={action('onChange') } inline={true} width={300} required={true} />
         </div>
     ));
