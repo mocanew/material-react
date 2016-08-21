@@ -11,6 +11,7 @@ class Select extends React.Component {
             width: 150,
             height: 48,
             value: '',
+            message: 'Please select something',
             selected: null,
             animation: true,
             animationDuration: 300,
@@ -18,7 +19,7 @@ class Select extends React.Component {
             inline: false,
             error: false,
             open: false,
-            required: true
+            required: false
         };
         var state = _.merge(defaults, _.pick(props, Object.keys(defaults)));
 
@@ -29,7 +30,7 @@ class Select extends React.Component {
                 };
             }
             if ((!state.selected || !state.selected.selected) && value.placeholder) {
-                state.placeholder = true;
+                state.placeholder = value;
                 state.selected = value;
             }
             if (value.selected) state.selected = value;
@@ -49,6 +50,7 @@ class Select extends React.Component {
         this.clickBody = this.clickBody.bind(this);
     }
     defaultValidator(e) {
+        e = e.text;
         return e && e.length <= 0;
     }
     close() {
@@ -64,7 +66,9 @@ class Select extends React.Component {
             scrollTop: 0
         }, this.state.animationDuration, 'linear');
 
-        this.validator(this.state.value);
+        this.setState({
+            error: this.validator(this.state.value) || (this.state.required && this.state.selected == this.state.placeholder)
+        });
     }
     open() {
         this.setState({
@@ -82,28 +86,20 @@ class Select extends React.Component {
     }
     clickLi(e) {
         var id = e.target.attributes['data-id'].value;
-        var state = {
-            value: this.state.options[id]
-        };
+        var selected = this.state.options[id];
+        this.setState({
+            value: this.state.options[id].text
+        });
 
         if (this.state.open) {
-            if (this.state.required) {
-                if (this.state.value) {
-                    state.error = false;
-                    state.empty = false;
-                }
-                else {
-                    state.error = true;
-                    state.empty = true;
-                }
-            }
-            state.selected = this.state.options[id];
+            this.setState({
+                selected: selected
+            });
 
-            this.onChange(state.selected.text, state.selected);
+            this.onChange(this.state.selected.text, this.state.selected);
             this.close();
             e.stopPropagation();
         }
-        this.setState(state);
     }
     clickBody(e) {
         var target = e.target.className.indexOf('materialSelect') != -1 ? $(e.target) : $(e.target).parents('.materialSelect');
@@ -123,6 +119,7 @@ class Select extends React.Component {
         var wrapperClasses = classnames({
             materialSelect: true,
             inline: this.state.inline,
+            error: this.state.error,
             empty: this.state.empty,
             animate: this.state.animation
         });
@@ -145,7 +142,7 @@ class Select extends React.Component {
         var content;
         if (this.state.onTop) {
             content = this.state.options.map((option, key) => {
-                if (option.placeholder) {
+                if (option.placeholder && this.state.required) {
                     return '';
                 }
 
@@ -163,7 +160,7 @@ class Select extends React.Component {
                         content
                     }
                 </ul>
-                <div className="message">Please select something</div>
+                <div className="message">{this.state.message}</div>
             </div>
         );
     }
@@ -188,6 +185,7 @@ Select.propTypes = {
         React.PropTypes.bool,
         React.PropTypes.string
     ]),
+    message: React.PropTypes.string,
     onChange: React.PropTypes.func,
     validator: React.PropTypes.func
 };
