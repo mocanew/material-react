@@ -1,5 +1,5 @@
 import React from 'react';
-import '../scss/_materialBtn.scss';
+import './index.scss';
 const classNames = require('classnames');
 
 class MaterialButton extends React.Component {
@@ -103,7 +103,7 @@ class MaterialButton extends React.Component {
                 })}
                 {this.props.children}
                 {
-                    classes.indexOf('iconBtn') >= 0 ? 
+                    classes.indexOf('iconBtn') >= 0 ?
                         <span>
                             <span className="s1"></span>
                             <span className="s2"></span>

@@ -1,13 +1,4 @@
-@import 'colors';
-
-$base-200: #90CAF9;
-$base-500: #2196F3;
-$base-700: #1976D2;
-$grey-200: #EEE;
-$accent: #311B92;
-$textAccent: #FFF;
-$errorColor: #DD2C00;
-$black: #000;
+@import '../variables';
 
 %button {
     position: relative;
@@ -34,6 +25,8 @@ $black: #000;
     }
 }
 .materialBtn {
+    display: inline-block;
+
     &.raised {
         @extend %button;
 
@@ -51,6 +44,7 @@ $black: #000;
     }
     &.flat {
         @extend %button;
+        padding: 10px 16px;
         box-shadow: none;
         transition: background 0.3s;
 
