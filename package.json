@@ -1,8 +1,8 @@
 {
   "name": "material-react",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "",
-  "main": "./lib",
+  "main": "./dist",
   "keywords": [
     "react",
     "material design",
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "start-storybook -p 9001",
-    "scss": "node-sass ./src --output ./dist",
+    "scss": "copyfiles -u 1 src/**/*.scss dist",
     "scsslint": "sass-lint -v --no-exit || true",
     "lint": "eslint src/**/*.js src/**/*.jsx",
     "babel": "babel ./src --out-dir ./dist",
@@ -38,6 +38,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-1": "^6.13.0",
     "classnames": "^2.2.5",
+    "copyfiles": "^1.0.0",
     "cross-env": "^2.0.0",
     "css-loader": "^0.23.1",
     "eslint": "^2.10.1",
