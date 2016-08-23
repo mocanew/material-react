@@ -1,5 +1,5 @@
 import React from 'react';
-import '../scss/_input.scss';
+import './index.scss';
 import classNames from 'classnames';
 import _ from 'lodash';
 
