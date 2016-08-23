@@ -1,0 +1,93 @@
+/* from bootstrap */
+.materialSelect {
+  height: 48px;
+  position: relative;
+  user-select: none; }
+  .materialSelect.inline {
+    display: inline-block; }
+  .materialSelect:not(.inline) {
+    display: block;
+    width: 100%; }
+  .materialSelect.error .select:not(.open) {
+    border: 1px solid #F44336 !important; }
+  .materialSelect.error .message {
+    display: block; }
+  .materialSelect.animate .select {
+    transition: background 0.2s ease, border 0.2s linear, transform 0.2s linear, height 0.2s linear, box-shadow 0.2s ease; }
+    .materialSelect.animate .select li {
+      transition: height 0.2s linear, opacity 0.2s ease, margin 0.2s linear; }
+  .materialSelect .select {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: -1px;
+    left: 0;
+    user-select: none;
+    width: 100%;
+    text-align: center;
+    height: 48px;
+    overflow: hidden;
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 0 transparent;
+    background-color: #FFF;
+    transform: translate(0, 0); }
+    .materialSelect .select:after {
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #BDBDBD;
+      content: '';
+      display: block;
+      height: 0px;
+      position: absolute;
+      pointer-events: none;
+      top: 19px;
+      right: 10px;
+      width: 0px; }
+    .materialSelect .select li {
+      cursor: pointer;
+      font-size: 15px;
+      list-style: none;
+      line-height: 48px;
+      padding: 0 48px 0 24px;
+      position: relative;
+      overflow: hidden;
+      user-select: none; }
+      .materialSelect .select li.selected {
+        height: 48px; }
+      .materialSelect .select li:not(.selected) {
+        height: 0px;
+        opacity: 0; }
+    .materialSelect .select.onTop {
+      z-index: 9999; }
+    .materialSelect .select.open {
+      background-color: #FAFAFA;
+      border-radius: 2px;
+      border-width: 0;
+      box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.3);
+      padding-bottom: 0;
+      height: 240px; }
+      .materialSelect .select.open:after {
+        display: none; }
+      .materialSelect .select.open:before {
+        border-color: transparent !important; }
+      .materialSelect .select.open li {
+        height: 48px;
+        opacity: 1; }
+        .materialSelect .select.open li.selected {
+          color: #FFC107; }
+        .materialSelect .select.open li:hover {
+          background-color: #E0E0E0; }
+        .materialSelect .select.open li:active {
+          background-color: #BDBDBD; }
+    .materialSelect .select:not(.open):hover {
+      background-color: #F5F5F5;
+      border-top: 1px solid #BDBDBD;
+      border-bottom: 1px solid #BDBDBD; }
+    .materialSelect .select:not(.open):active {
+      box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.3); }
+  .materialSelect .message {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    color: #F44336;
+    display: none; }

@@ -1,0 +1,185 @@
+/* from bootstrap */
+.materialBtn.raised, .materialBtn.flat {
+  position: relative;
+  overflow: hidden;
+  font-size: 18px;
+  line-height: 1.33;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  outline: 0;
+  transition: background 0.3s, box-shadow 0.3s;
+  user-select: none; }
+  .materialBtn.raised > span, .materialBtn.flat > span {
+    overflow: hidden; }
+  .materialBtn.raised .drop, .materialBtn.flat .drop {
+    background: rgba(0, 0, 0, 0.2); }
+  .materialBtn.raised i, .materialBtn.flat i {
+    vertical-align: middle;
+    outline: 0; }
+
+.materialBtn {
+  display: inline-block; }
+  .materialBtn.raised {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.3); }
+    .materialBtn.raised:hover {
+      box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.5); }
+    .materialBtn.raised:active {
+      box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.5); }
+  .materialBtn.flat {
+    padding: 10px 16px;
+    box-shadow: none;
+    transition: background 0.3s; }
+    .materialBtn.flat:hover {
+      background: rgba(158, 158, 158, 0.2); }
+    .materialBtn.flat:active {
+      background: rgba(158, 158, 158, 0.4); }
+  .materialBtn.iconBtn {
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: transform 0.5s; }
+    .materialBtn.iconBtn.raised {
+      transition: transform 0.5s, box-shadow 0.5s, background 0.5s; }
+    .materialBtn.iconBtn > span {
+      position: relative;
+      display: block;
+      width: 30px;
+      height: 30px;
+      overflow: hidden;
+      line-height: 30px;
+      transform: translate(0, 0) scale(1, 1);
+      transition: transform 0.5s; }
+      .materialBtn.iconBtn > span > span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        border: 1px solid transparent;
+        transform: translate(0, 0) scale(1, 1);
+        transition: transform 0.5s, background 0.5s; }
+  .materialBtn.play > span {
+    transform: translate(15px, 0) scale(1.6, 1); }
+  .materialBtn.play > span > span {
+    transform: rotate(-45deg) translate(-15px, -15px) scale(1, 1); }
+  .materialBtn.pause > span > span {
+    transform: scale(0.4, 1) translate(-24px, 0); }
+    .materialBtn.pause > span > span.s3 {
+      transform: scale(0.4, 1) translate(24px, 0); }
+  .materialBtn.stop > span {
+    transform: scale(0.8, 0.8); }
+  .materialBtn.menu > span > span {
+    transform: scale(1, 0.1) translate(0, -90px); }
+    .materialBtn.menu > span > span.s2 {
+      transform: scale(1, 0.1) translate(0, 0); }
+    .materialBtn.menu > span > span.s3 {
+      transform: scale(1, 0.1) translate(0, 90px); }
+  .materialBtn.close > span {
+    transform: rotate(45deg); }
+  .materialBtn.close > span > span,
+  .materialBtn.plus > span > span {
+    transform: scale(1, 0.1) translate(0, 0); }
+    .materialBtn.close > span > span.s3,
+    .materialBtn.plus > span > span.s3 {
+      transform: scale(0.1, 1); }
+  .materialBtn.minus > span > span {
+    transform: scale(1, 0.2); }
+  .materialBtn.more > span > span {
+    border-radius: 30px;
+    transform: scale(0.2, 0.2) translate(-45px, 0); }
+    .materialBtn.more > span > span.s2 {
+      transform: scale(0.2, 0.2) translate(0, 0); }
+    .materialBtn.more > span > span.s3 {
+      transform: scale(0.2, 0.2) translate(45px, 0); }
+  .materialBtn.topArrow > span > span {
+    width: 0.4em;
+    height: 1.8em;
+    transform: translate(12px, 3px); }
+    .materialBtn.topArrow > span > span.s2 {
+      height: 21px;
+      transform: translate(15px, 0) rotate(45deg);
+      transform-origin: 0 0; }
+    .materialBtn.topArrow > span > span.s3 {
+      height: 21px;
+      transform: translate(9px, 0) rotate(-45deg);
+      transform-origin: 100% 0; }
+  .materialBtn.bottomArrow > span > span {
+    width: 0.4em;
+    height: 1.8em;
+    transform: translate(12px, 0); }
+    .materialBtn.bottomArrow > span > span.s2 {
+      height: 21px;
+      transform: translate(9px, 9px) rotate(45deg);
+      transform-origin: 100% 100%; }
+    .materialBtn.bottomArrow > span > span.s3 {
+      height: 21px;
+      transform: translate(15px, 9px) rotate(-45deg);
+      transform-origin: 0 100%; }
+  .materialBtn.rightArrow > span > span {
+    width: 27px;
+    height: 6px;
+    transform: translate(0, 12px); }
+    .materialBtn.rightArrow > span > span.s2 {
+      width: 21px;
+      transform: translate(9px, 15px) rotate(45deg);
+      transform-origin: 100% 0; }
+    .materialBtn.rightArrow > span > span.s3 {
+      width: 21px;
+      transform: translate(9px, 9px) rotate(-45deg);
+      transform-origin: 100% 100%; }
+  .materialBtn.leftArrow > span > span {
+    width: 27px;
+    height: 6px;
+    transform: translate(3px, 12px); }
+    .materialBtn.leftArrow > span > span.s2 {
+      width: 21px;
+      transform: translate(0, 9px) rotate(45deg);
+      transform-origin: 0 100%; }
+    .materialBtn.leftArrow > span > span.s3 {
+      width: 21px;
+      transform: translate(0, 15px) rotate(-45deg);
+      transform-origin: 0 0; }
+  .materialBtn.checked > span > span {
+    width: 15px;
+    height: 6px;
+    transform: translate(-4.5px, 21px) rotate(45deg);
+    transform-origin: 100% 100%; }
+    .materialBtn.checked > span > span.s3 {
+      width: 27px;
+      transform: translate(10.5px, 21px) rotate(-45deg);
+      transform-origin: 0 100%; }
+  .materialBtn.heart > span > span {
+    top: 3px;
+    left: 15px;
+    width: 15px;
+    height: 25.5px;
+    border-radius: 15px 15px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%; }
+    .materialBtn.heart > span > span.s3 {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%; }
+
+.drop {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: #CCC;
+  border-radius: 100%;
+  transform: scale(0); }
+  .drop.animate {
+    animation: drop 1s ease-out; }
+
+@keyframes drop {
+  100% {
+    opacity: 0;
+    transform: scale(2.5); } }

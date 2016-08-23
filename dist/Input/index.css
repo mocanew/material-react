@@ -1,0 +1,74 @@
+/* from bootstrap */
+.materialInput input:focus ~ label, .materialInput input:required:valid ~ label, .materialInput:not(.empty) input ~ label {
+  top: -20px;
+  font-size: 14px;
+  color: #303F9F;
+  outline: 0;
+  opacity: 1; }
+
+.materialInput {
+  position: relative;
+  margin: 20px 0 35px;
+  transition: margin 0.3s; }
+  .materialInput input {
+    display: block;
+    width: 100%;
+    padding: 10px 10px 10px 5px;
+    font-size: 18px;
+    border: 0;
+    border-bottom: 1px solid #757575;
+    outline: 0;
+    box-shadow: none; }
+    .materialInput input:focus ~ .bar:before, .materialInput input:focus ~ .bar:after {
+      width: 50%; }
+    .materialInput input:focus ~ .highlight {
+      animation: inputHighlighter 0.3s ease; }
+  .materialInput label {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    font-size: 18px;
+    font-weight: normal;
+    color: #000;
+    pointer-events: none;
+    opacity: 0.38;
+    transition: 0.2s opacity, 0.2s top, color 0.2s, font-size 0.2s; }
+  .materialInput .bar {
+    position: relative;
+    display: block;
+    width: 100%; }
+    .materialInput .bar:before, .materialInput .bar:after {
+      position: absolute;
+      bottom: 1px;
+      width: 0;
+      height: 2px;
+      background: #303F9F;
+      content: '';
+      transition: width 0.5s, color 0.2s; }
+    .materialInput .bar:before {
+      left: 50%; }
+    .materialInput .bar:after {
+      right: 50%; }
+  .materialInput .highlight {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    width: 100px;
+    height: 60%;
+    pointer-events: none;
+    opacity: 0.5; }
+  .materialInput .message {
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 14px;
+    text-align: left;
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s; }
+  .materialInput.error {
+    margin-bottom: 45px; }
+    .materialInput.error .bar:after, .materialInput.error .bar:before {
+      width: 50%;
+      background: #F44336; }
+    .materialInput.error .message {
+      color: #F44336;
+      opacity: 1; }
