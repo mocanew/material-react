@@ -1,8 +1,18 @@
 {
-  "name": "home-control",
+  "name": "material-react",
   "version": "0.0.1",
   "description": "",
-  "main": "homeControl.js",
+  "main": "./src",
+  "keywords": [
+    "react",
+    "material design",
+    "components",
+    "react-component"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rontav/material-react.git"
+  },
   "scripts": {
     "start": "start-storybook -p 9001",
     "scsslint": "sass-lint -v --no-exit || true",
@@ -30,27 +40,29 @@
     "sass-lint": "^1.7.0",
     "sass-loader": "^3.2.0",
     "script-loader": "^0.7.0",
-    "webpack-dev-server": "^1.14.1"
-  },
-  "dependencies": {
-    "bootstrap": "^3.3.6",
-    "bootstrap-webpack": "0.0.5",
-    "classnames": "^2.2.5",
+    "webpack-dev-server": "^1.14.1",
     "css-loader": "^0.23.1",
     "exports-loader": "^0.6.3",
     "expose-loader": "^0.7.1",
-    "font-awesome": "^4.6.3",
     "imports-loader": "^0.6.5",
-    "jquery": "^2.2.2",
     "jsx-loader": "^0.13.2",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
-    "react": "^15.0.2",
-    "react-dom": "^15.0.2",
     "react-router": "^2.4.0",
     "rimraf": "^2.5.2",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.0"
+    "classnames": "^2.2.5",
+    "font-awesome": "^4.6.3",
+    "jquery": "^2.2.2",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2"
+  },
+  "peerDependencies": {
+    "classnames": "^2.2.5",
+    "font-awesome": "^4.6.3",
+    "jquery": "^2.2.2",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2"
   }
 }
