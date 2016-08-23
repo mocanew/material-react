@@ -1,3 +1,3 @@
-exports.Button = require('./Button').default;
-exports.Input = require('./Input').default;
-exports.Select = require('./Select').default;
+export Button from './Button';
+export Input from './Input';
+export Select from './Select';
