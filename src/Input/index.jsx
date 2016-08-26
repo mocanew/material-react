@@ -94,7 +94,7 @@ class Input extends React.Component {
                 <input type={this.state.type} name={this.state.name} onInput={this.onInput} onBlur={this.onInput} ref="input" required={this.state.required} defaultValue={this.state.value} />
                 <span className="highlight"></span>
                 <span className="bar"></span>
-                <label htmlFor="name">{this.state.title + (this.state.required ? '*' : '') }</label>
+                <label htmlFor="name">{this.state.title}</label>
                 <div className="message">{this.state.message}</div>
             </div>
         );
