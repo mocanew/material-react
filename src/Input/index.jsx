@@ -36,7 +36,7 @@ class Input extends React.Component {
         };
     }
     static defaultValidator(e, options) {
-        var empty = (e.trim().length > 0) ? false : true;
+        var empty = (e && e.trim && e.trim().length > 0) ? false : true;
         return {
             empty: empty,
             error: options && options.required && empty ? true : false
