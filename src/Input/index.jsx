@@ -14,6 +14,7 @@ class Input extends React.Component {
             type: 'text',
             required: false,
             message: '',
+            multiline: false,
             value: ''
         }, props);
         state.required = JSON.parse(props.required);
@@ -65,7 +66,9 @@ class Input extends React.Component {
         if (typeof validator.message != 'string') {
             validator.message = this.props.message;
         }
-
+        this.refs.input.style.height = 0;
+        var computedStyle = window.getComputedStyle(this.refs.input);
+        this.refs.input.style.height = (this.refs.input.scrollHeight - parseInt(computedStyle.paddingTop) - parseInt(computedStyle.paddingBottom)) + 'px';
         this.setState({
             empty: validator.empty,
             error: validator.error,
@@ -83,15 +86,25 @@ class Input extends React.Component {
             error: false
         });
     }
+    componentDidMount() {
+        this.refs.input.style.height = 0;
+    }
     render() {
         var parentClasses = classNames({
             materialInput: true,
             error: this.state.error,
             empty: this.state.empty
         });
+        var field;
+        if (this.state.multiline) {
+            field = <textarea className="input" name={this.state.name} onInput={this.onInput} onBlur={this.onInput} ref="input" defaultValue={this.state.value} />;
+        }
+        else {
+            field = <input className="input" type={this.state.type} name={this.state.name} onInput={this.onInput} onBlur={this.onInput} ref="input" required={this.state.required} defaultValue={this.state.value} />;
+        }
         return (
             <div className={parentClasses} ref="parent">
-                <input type={this.state.type} name={this.state.name} onInput={this.onInput} onBlur={this.onInput} ref="input" required={this.state.required} defaultValue={this.state.value} />
+                {field}
                 <span className="highlight"></span>
                 <span className="bar"></span>
                 <label htmlFor="name">{this.state.title}</label>
@@ -105,6 +118,7 @@ Input.propTypes = {
     name: React.PropTypes.string,
     children: React.PropTypes.string,
     title: React.PropTypes.string,
+    multiline: React.PropTypes.bool,
     required: React.PropTypes.oneOfType([
         React.PropTypes.bool,
         React.PropTypes.string

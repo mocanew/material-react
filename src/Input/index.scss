@@ -13,10 +13,12 @@
     margin: 20px 0 35px;
     transition: margin 0.3s;
 
-    input {
+    .input {
         display: block;
         width: 100%;
+        min-height: 23px;
         padding: 10px 10px 10px 5px;
+        font-family: inherit;
         font-size: 18px;
         border: 0;
         border-bottom: 1px solid #757575;
@@ -45,14 +47,18 @@
             }
         }
     }
-
-    &:not(.empty) {
-        input {
-            & ~ label {
-                @extend %label;
-            }
+    textarea {
+        &.input {
+            resize: none;
         }
     }
+
+    &:not(.empty) {
+        .input  ~ label {
+            @extend %label;
+        }
+    }
+
 
     label {
         position: absolute;
