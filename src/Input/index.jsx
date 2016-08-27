@@ -22,6 +22,7 @@ class Input extends React.Component {
         state.title = props.title ? props.title : props.children;
         state.empty = state.value.length <= 0;
         this.state = state;
+        this.validate = this.validate.bind(this);
         this.validator = _.isFunction(props.validator) ? props.validator : Input.defaultValidator;
         this.onInput = this.onInput.bind(this);
         this.onBlur = this.onBlur.bind(this);
@@ -60,6 +61,9 @@ class Input extends React.Component {
         if (_.isFunction(this.props.onInput)) this.props.onInput(input);
         if (_.isFunction(this.props.onChange) && this.state.value.trim() != input.trim()) this.props.onChange(input.trim());
 
+        this.validate(input);
+    }
+    validate(input) {
         var validator = this.validator(input, {
             required: this.state.required
         });
@@ -94,6 +98,11 @@ class Input extends React.Component {
     componentDidMount() {
         if (this.state.multiline) {
             this.refs.input.style.height = 0;
+        }
+    }
+    componentWillReceiveProps(newProps) {
+        if (newProps.value != this.state.value) {
+            this.validate(newProps.value);
         }
     }
     render() {
