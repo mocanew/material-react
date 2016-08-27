@@ -1,8 +1,5 @@
 files:
-    include: 'www/scss/*.scss'
-    ignore:
-        - 'www/scss/materialIcons.scss'
-        - 'www/scss/_roboto.scss'
+    include: 'src/**/*.scss'
 rules:
     no-color-literals:
         - 0
