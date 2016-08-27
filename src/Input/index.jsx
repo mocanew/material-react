@@ -89,10 +89,10 @@ class Input extends React.Component {
         }
     }
     clear() {
-        this.refs.input.value = '';
         this.setState({
             empty: true,
-            error: false
+            error: false,
+            value: ''
         });
     }
     // componentDidMount() {
@@ -101,7 +101,7 @@ class Input extends React.Component {
     //     }
     // }
     componentWillReceiveProps(newProps) {
-        if (newProps.value != this.state.value) {
+        if (_.isString(newProps.value) && newProps.value != this.state.value) {
             this.validate(newProps.value);
         }
     }
