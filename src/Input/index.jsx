@@ -73,11 +73,11 @@ class Input extends React.Component {
         if (_.isString(validator.value)) {
             input = validator.value;
         }
-        if (this.state.multiline) {
-            this.refs.input.style.height = 0;
-            var computedStyle = window.getComputedStyle(this.refs.input);
-            this.refs.input.style.height = (this.refs.input.scrollHeight - parseInt(computedStyle.paddingTop) - parseInt(computedStyle.paddingBottom)) + 'px';
-        }
+        // if (this.state.multiline) {
+        //     this.refs.input.style.height = 0;
+        //     var computedStyle = window.getComputedStyle(this.refs.input);
+        //     this.refs.input.style.height = (this.refs.input.scrollHeight - parseInt(computedStyle.paddingTop) - parseInt(computedStyle.paddingBottom)) + 'px';
+        // }
         this.setState({
             empty: validator.empty,
             error: validator.error,
@@ -95,11 +95,11 @@ class Input extends React.Component {
             error: false
         });
     }
-    componentDidMount() {
-        if (this.state.multiline) {
-            this.refs.input.style.height = 0;
-        }
-    }
+    // componentDidMount() {
+    //     if (this.state.multiline) {
+    //         this.refs.input.style.height = 0;
+    //     }
+    // }
     componentWillReceiveProps(newProps) {
         if (newProps.value != this.state.value) {
             this.validate(newProps.value);
