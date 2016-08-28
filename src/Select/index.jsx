@@ -23,31 +23,53 @@ class Select extends React.Component {
         };
         var state = _.merge(defaults, _.pick(props, Object.keys(defaults)));
 
-        _.each(state.options, (value, key) => {
-            if (!_.isObject(value)) {
-                value = {
-                    text: value
-                };
-            }
-            if ((!state.selected || !state.selected.selected) && value.placeholder) {
-                state.placeholder = value;
-                state.selected = value;
-            }
-            if (value.selected) state.selected = value;
-            value.key = key;
-
-            state.options[key] = value;
-        });
-        if (state.selected) state.value = state.selected.text;
+        this.parseOptions(state.options, state);
         this.state = state;
 
         this.validator = _.isFunction(props.validator) ? props.validator : this.defaultValidator.bind(this);
         this.onChange = _.isFunction(props.onChange) ? props.onChange : () => { };
 
+        this.parseOptions = this.parseOptions.bind(this);
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
         this.clickLi = this.clickLi.bind(this);
         this.clickBody = this.clickBody.bind(this);
+    }
+    parseOptions(options, state) {
+        _.each(options, (value, key) => {
+            if (!_.isObject(value)) {
+                value = {
+                    text: value
+                };
+            }
+            var selected = this.state ? !this.state.selected : !state.selected;
+            if (selected && value.placeholder) {
+                if (state) {
+                    state.selected = value;
+                    state.placeholder = value;
+                }
+                else {
+                    this.setState({
+                        placeholder: value,
+                        selected: value
+                    });
+                }
+            }
+            if (value.selected) {
+                if (state) {
+                    state.selected = value;
+                }
+                else {
+                    this.setState({
+                        selected: value
+                    });
+                }
+            }
+            value.key = key;
+
+            options[key] = value;
+        });
+        return options;
     }
     defaultValidator(e) {
         e = e.text;
@@ -67,7 +89,7 @@ class Select extends React.Component {
         }, this.state.animationDuration, 'linear');
 
         this.setState({
-            error: this.validator(this.state.value) || (this.state.required && this.state.selected == this.state.placeholder)
+            error: this.validator(this.state.selected.text) || (this.state.required && this.state.selected == this.state.placeholder)
         });
     }
     open() {
@@ -115,6 +137,13 @@ class Select extends React.Component {
         $(document.body).off('click', this.clickBody);
         $(this.refs.wrapper).off('click', 'li', this.clickLi);
     }
+    componentWillReceiveProps(newProps) {
+        if (newProps.options) {
+            this.setState({
+                options: this.parseOptions(newProps.options)
+            });
+        }
+    }
     render() {
         var wrapperClasses = classnames({
             materialSelect: true,
@@ -131,7 +160,7 @@ class Select extends React.Component {
             open: this.state.open,
             onTop: this.state.onTop
         });
-        var optionsNumber = this.state.options.length - (this.state.placeholder ? 1 : 0);
+        var optionsNumber = this.state.options.length - (this.state.placeholder && this.state.required ? 1 : 0);
         var height = !this.state.open ? this.state.height : Math.min(optionsNumber * this.state.height, 5 * this.state.height);
         var selectStyle = {
             transform: this.state.open ? `translate(0, calc(${this.state.height / 2}px - 50%))` : false,
