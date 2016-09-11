@@ -72,8 +72,8 @@ class MaterialButton extends React.Component {
 
             this.findFreeDrop((i) => {
                 var rect = this.refs.button.getBoundingClientRect();
-                var x = page.x - maxWidthHeight / 2 - rect.left;
-                var y = page.y - maxWidthHeight / 2 - rect.top;
+                var x = page.x - window.scrollX - maxWidthHeight / 2 - rect.left;
+                var y = page.y - window.scrollY - maxWidthHeight / 2 - rect.top;
 
                 this.updateDrop({
                     size: maxWidthHeight,
