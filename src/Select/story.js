@@ -4,9 +4,6 @@ import Select from './index.jsx';
 
 import '../_story.scss';
 
-import $ from 'jquery';
-window.$ = $;
-
 var smallList = [
     {
         placeholder: true,

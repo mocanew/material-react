@@ -4,9 +4,6 @@ import Button from './index.jsx';
 
 import '../_story.scss';
 
-import $ from 'jquery';
-window.$ = $;
-
 storiesOf('Button', module)
     .add('Required & not required', () => (
         <div>

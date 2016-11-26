@@ -1,7 +1,22 @@
 import React from 'react';
 import _ from 'lodash';
+import smoothscroll from 'smoothscroll';
 import classnames from 'classnames';
 import './index.scss';
+
+function getParents(el, parentSelector) {
+    var parents = [];
+    var p = el.parentElement;
+
+    while (p && (!parentSelector || p.parentElement.querySelector(parentSelector) == null)) {
+        var o = p;
+        parents.push(o);
+        p = o.parentElement;
+    }
+    if (p) parents.push(p);
+
+    return parents;
+}
 
 class Select extends React.Component {
     constructor(props) {
@@ -84,9 +99,7 @@ class Select extends React.Component {
         this.setState({
             open: false
         });
-        $(this.refs.select).animate({
-            scrollTop: 0
-        }, this.state.animationDuration, 'linear');
+        smoothscroll(0, this.state.animationDuration, null, this.refs.select);
 
         this.setState({
             error: this.validator(this.state.selected.text) || (this.state.required && this.state.selected == this.state.placeholder)
@@ -100,11 +113,7 @@ class Select extends React.Component {
 
         var pos = Math.max((this.state.options.indexOf(this.state.selected) - 2) * this.state.height, 0);
 
-        setTimeout(() => {
-            $(this.refs.select).animate({
-                scrollTop: pos
-            }, this.state.animationDuration, 'linear');
-        });
+        smoothscroll(pos, this.state.animationDuration, null, this.refs.select);
     }
     clickLi(e) {
         var id = e.target.attributes['data-id'].value;
@@ -124,18 +133,22 @@ class Select extends React.Component {
         }
     }
     clickBody(e) {
-        var target = e.target.className.indexOf('materialSelect') != -1 ? $(e.target) : $(e.target).parents('.materialSelect');
-
-        if (target[0] == this.refs.wrapper) this.open();
+        var target = e.target;
+        if (e.target.className.indexOf('materialSelect') == -1) {
+            var parents = getParents(e.target, '.materialSelect');
+            var last = parents[parents.length - 1];
+            if (last && last.className.indexOf('materialSelect') != -1) target = last;
+        }
+        if (target == this.refs.wrapper) this.open();
         else this.close();
     }
     componentDidMount() {
-        $(document.body).on('click', this.clickBody);
-        $(this.refs.wrapper).on('click', 'li', this.clickLi);
+        document.body.addEventListener('click', this.clickBody);
+        this.refs.wrapper.addEventListener('click', this.clickLi);
     }
     componentWillUnmount() {
-        $(document.body).off('click', this.clickBody);
-        $(this.refs.wrapper).off('click', 'li', this.clickLi);
+        document.body.removeEventListener('click', this.clickBody);
+        this.refs.wrapper.removeEventListener('click', this.clickLi);
     }
     componentWillReceiveProps(newProps) {
         if (newProps.options) {

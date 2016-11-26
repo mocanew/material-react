@@ -4,9 +4,6 @@ import Input from './index.jsx';
 
 import '../_story.scss';
 
-import $ from 'jquery';
-window.$ = $;
-
 storiesOf('Input', module)
     .add('Required & not required', () => (
         <div>
