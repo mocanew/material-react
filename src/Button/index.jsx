@@ -85,7 +85,7 @@ class MaterialButton extends React.Component {
     }
     render () {
         var toggleClass = this.state.toggleState ? this.props.toggleOffClass : this.props.toggleOnClass;
-        var classes = classNames(this.props.classes, 'materialBtn', this.props.buttonStyle, toggleClass);
+        var classes = classNames(this.props.className, 'materialBtn', this.props.style, toggleClass);
         return (
             <div className={classes} onMouseDown={this.onMouseDown} onClick={this.onClick} ref="button">
                 {this.state.drops.map((e, index) => {
@@ -115,8 +115,8 @@ class MaterialButton extends React.Component {
     }
 }
 MaterialButton.propTypes = {
-    buttonStyle: React.PropTypes.string,
-    classes: React.PropTypes.string,
+    style: React.PropTypes.string,
+    className: React.PropTypes.string,
     children: React.PropTypes.node,
     toggleOffClass: React.PropTypes.string,
     toggleOnClass: React.PropTypes.string,

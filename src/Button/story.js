@@ -10,8 +10,8 @@ window.$ = $;
 storiesOf('Button', module)
     .add('Required & not required', () => (
         <div>
-            <Button buttonStyle="flat">Flat button</Button>
+            <Button style="flat">Flat button</Button>
             <br /><br />
-            <Button buttonStyle="raised">Raised button</Button>
+            <Button style="raised">Raised button</Button>
         </div>
     ));
