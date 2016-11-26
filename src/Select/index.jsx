@@ -91,7 +91,7 @@ class Select extends React.Component {
         return e && e.length <= 0;
     }
     close() {
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
             this.setState({
                 onTop: false
             });
@@ -106,6 +106,7 @@ class Select extends React.Component {
         });
     }
     open() {
+        clearTimeout(this.timeout);
         this.setState({
             open: true,
             onTop: true
