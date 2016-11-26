@@ -117,6 +117,7 @@ class Select extends React.Component {
         smoothscroll(pos, this.state.animationDuration, null, this.refs.select);
     }
     clickLi(e) {
+        if (!e.target || !e.target.attributes['data-id']) return;
         var id = e.target.attributes['data-id'].value;
         var selected = this.state.options[id];
         this.setState({
