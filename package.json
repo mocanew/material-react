@@ -1,6 +1,6 @@
 {
   "name": "material-react",
-  "version": "0.0.700",
+  "version": "0.0.701",
   "description": "",
   "main": "./dist",
   "keywords": [
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "start-storybook -p 9001",
-    "scss": "copyfiles -u 1 src/**/*.scss dist",
+    "scss": "copyfiles -u 1 src/**/*.scss dist/ && copyfiles -u 1 src/_variables.scss dist/",
     "scsslint": "sass-lint -v --no-exit || true",
     "lint": "eslint src/**/*.js src/**/*.jsx",
     "babel": "babel ./src --out-dir ./dist",
@@ -64,7 +64,6 @@
     "sass-lint": "^1.7.0",
     "sass-loader": "^4.0.2",
     "script-loader": "^0.7.0",
-    "smoothscroll": "^0.2.2",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack-dev-server": "^1.15.1"
@@ -73,6 +72,7 @@
     "classnames": "^2.2.5",
     "font-awesome": "^4.6.3",
     "react": "^15.0.2",
-    "react-dom": "^15.0.2"
+    "react-dom": "^15.0.2",
+    "smoothscroll": "^0.2.2"
   }
 }
