@@ -3,79 +3,78 @@ import './index.scss';
 const classNames = require('classnames');
 
 class MaterialButton extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
-            drop: true,
-            drops: [],
+            ripples: [],
             toggleState: false
         };
         this.onMouseDown = this.onMouseDown.bind(this);
-        this.updateDrop = this.updateDrop.bind(this);
-        this.findFreeDrop = this.findFreeDrop.bind(this);
-        this.createDrop = this.createDrop.bind(this);
+        this.updateRipple = this.updateRipple.bind(this);
+        this.findFreeRipple = this.findFreeRipple.bind(this);
+        this.createRipple = this.createRipple.bind(this);
         this.onClick = this.onClick.bind(this);
     }
-    onClick () {
+    onClick() {
         if (typeof this.props.onClick == 'function') this.props.onClick();
         this.setState({
             toggleState: !this.state.toggleState
         });
     }
-    updateDrop (e, index) {
-        var drop = this.state.drops[index];
+    updateRipple(e, index) {
+        var ripple = this.state.ripples[index];
 
-        drop.done = false;
-        drop.size = e.size;
-        drop.top = e.top;
-        drop.left = e.left;
+        ripple.done = false;
+        ripple.size = e.size;
+        ripple.top = e.top;
+        ripple.left = e.left;
 
         this.forceUpdate();
         setTimeout(() => {
-            drop.done = true;
+            ripple.done = true;
             this.forceUpdate();
         }, 1000);
     }
-    createDrop (callback) {
-        var drops = this.state.drops.concat([]);
-        drops.push({
+    createRipple(callback) {
+        var ripples = this.state.ripples.concat([]);
+        ripples.push({
             size: 0,
             top: 0,
             left: 0,
             done: true
         });
         this.setState({
-            drops: drops
-        }, () => callback(this.state.drops.length - 1));
+            ripples: ripples
+        }, () => callback(this.state.ripples.length - 1));
     }
-    findFreeDrop (callback) {
+    findFreeRipple(callback) {
         var i = 0;
-        if (!this.state.drops.length) {
-            return this.createDrop(callback);
+        if (!this.state.ripples.length) {
+            return this.createRipple(callback);
         }
 
-        for (i = 0; i < this.state.drops.length; i++) {
-            if (this.state.drops[i].done == true) {
+        for (i = 0; i < this.state.ripples.length; i++) {
+            if (this.state.ripples[i].done == true) {
                 return callback(i);
             }
         }
-        this.createDrop(callback);
+        this.createRipple(callback);
     }
-    onMouseDown (event) {
+    onMouseDown(event) {
         event.stopPropagation();
         var page = {
             x: event.pageX,
             y: event.pageY
         };
-        if (this.state.drop) {
+        if (this.props.ripple) {
             var maxWidthHeight = Math.max(this.refs.button.offsetWidth, this.refs.button.offsetWidth);
 
-            this.findFreeDrop((i) => {
+            this.findFreeRipple((i) => {
                 var rect = this.refs.button.getBoundingClientRect();
                 var x = page.x - window.scrollX - maxWidthHeight / 2 - rect.left;
                 var y = page.y - window.scrollY - maxWidthHeight / 2 - rect.top;
 
-                this.updateDrop({
+                this.updateRipple({
                     size: maxWidthHeight,
                     top: y,
                     left: x
@@ -83,14 +82,17 @@ class MaterialButton extends React.Component {
             });
         }
     }
-    render () {
+    render() {
         var toggleClass = this.state.toggleState ? this.props.toggleOffClass : this.props.toggleOnClass;
-        var classes = classNames(this.props.className, 'materialBtn', this.props.style, toggleClass);
+        var classes = classNames(this.props.className, 'materialButton', {
+            flat: this.props.flat,
+            raised: this.props.raised
+        }, toggleClass);
         return (
-            <div className={classes} onMouseDown={this.onMouseDown} onClick={this.onClick} ref="button">
-                {this.state.drops.map((e, index) => {
+            <div className={classes} style={this.props.style} onMouseDown={this.onMouseDown} onClick={this.onClick} ref="button">
+                {this.state.ripples.map((e, index) => {
                     var classes = classNames({
-                        drop: true,
+                        ripple: true,
                         animate: e.done == false
                     });
                     var style = {
@@ -115,12 +117,18 @@ class MaterialButton extends React.Component {
     }
 }
 MaterialButton.propTypes = {
-    style: React.PropTypes.string,
+    style: React.PropTypes.object,
     className: React.PropTypes.string,
     children: React.PropTypes.node,
     toggleOffClass: React.PropTypes.string,
     toggleOnClass: React.PropTypes.string,
-    onClick: React.PropTypes.func
+    onClick: React.PropTypes.func,
+    raised: React.PropTypes.bool,
+    flat: React.PropTypes.bool,
+    ripple: React.PropTypes.bool,
+};
+MaterialButton.defaultProps = {
+    ripple: true
 };
 
 export default MaterialButton;

@@ -16,7 +16,7 @@
     > span {
         overflow: hidden;
     }
-    .drop {
+    .ripple {
         background: rgba($black, 0.2);
     }
     i {
@@ -24,7 +24,7 @@
         outline: 0;
     }
 }
-.materialBtn {
+.materialButton {
     display: inline-block;
 
     &.raised {
@@ -222,7 +222,7 @@
     }
 }
 
-.drop {
+.ripple {
     position: absolute;
     display: block;
     width: 100%;
@@ -233,11 +233,11 @@
     transform: scale(0);
 
     &.animate {
-        animation: drop 1s ease-out;
+        animation: ripple 1s ease-out;
     }
 }
 
-@keyframes drop {
+@keyframes ripple {
     100% {
         opacity: 0;
         transform: scale(2.5);

@@ -7,8 +7,8 @@ import '../_story.scss';
 storiesOf('Button', module)
     .add('Required & not required', () => (
         <div>
-            <Button style="flat">Flat button</Button>
+            <Button flat>Flat button</Button>
             <br /><br />
-            <Button style="raised">Raised button</Button>
+            <Button raised>Raised button</Button>
         </div>
     ));
