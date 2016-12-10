@@ -1,6 +1,6 @@
 {
   "name": "material-react",
-  "version": "0.0.801",
+  "version": "0.0.802",
   "description": "",
   "main": "./dist",
   "keywords": [
@@ -68,7 +68,7 @@
     "url-loader": "^0.5.7",
     "webpack-dev-server": "^1.15.1"
   },
-  "peerDependencies": {
+  "dependencies": {
     "classnames": "^2.2.5",
     "font-awesome": "^4.6.3",
     "react": "^15.0.2",
