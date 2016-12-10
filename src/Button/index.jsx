@@ -15,8 +15,8 @@ class MaterialButton extends React.Component {
         this.createRipple = this.createRipple.bind(this);
         this.onClick = this.onClick.bind(this);
     }
-    onClick() {
-        if (typeof this.props.onClick == 'function') this.props.onClick();
+    onClick(e) {
+        if (typeof this.props.onClick == 'function') this.props.onClick(e);
         this.setState({
             toggleState: !this.state.toggleState
         });
