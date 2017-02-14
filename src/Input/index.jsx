@@ -52,7 +52,6 @@ class Input extends React.Component {
         }), 500);
     }
     onBlur(e) {
-        this.onInput();
         if (_.isFunction(this.props.onBlur)) this.props.onBlur(e);
     }
     onInput() {
