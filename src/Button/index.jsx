@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './index.scss';
 const classNames = require('classnames');
 
@@ -117,15 +118,15 @@ class MaterialButton extends React.Component {
     }
 }
 MaterialButton.propTypes = {
-    style: React.PropTypes.object,
-    className: React.PropTypes.string,
-    children: React.PropTypes.node,
-    toggleOffClass: React.PropTypes.string,
-    toggleOnClass: React.PropTypes.string,
-    onClick: React.PropTypes.func,
-    raised: React.PropTypes.bool,
-    flat: React.PropTypes.bool,
-    ripple: React.PropTypes.bool,
+    style: PropTypes.object,
+    className: PropTypes.string,
+    children: PropTypes.node,
+    toggleOffClass: PropTypes.string,
+    toggleOnClass: PropTypes.string,
+    onClick: PropTypes.func,
+    raised: PropTypes.bool,
+    flat: PropTypes.bool,
+    ripple: PropTypes.bool,
 };
 MaterialButton.defaultProps = {
     ripple: true

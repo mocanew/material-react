@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import smoothscroll from 'smoothscroll';
 import classnames from 'classnames';
@@ -211,27 +212,27 @@ class Select extends React.Component {
 }
 
 Select.propTypes = {
-    options: React.PropTypes.array,
-    height: React.PropTypes.number,
-    animation: React.PropTypes.oneOfType([
-        React.PropTypes.bool,
-        React.PropTypes.string
+    options: PropTypes.array,
+    height: PropTypes.number,
+    animation: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string
     ]),
-    inline: React.PropTypes.oneOfType([
-        React.PropTypes.bool,
-        React.PropTypes.string
+    inline: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string
     ]),
-    open: React.PropTypes.oneOfType([
-        React.PropTypes.bool,
-        React.PropTypes.string
+    open: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string
     ]),
-    required: React.PropTypes.oneOfType([
-        React.PropTypes.bool,
-        React.PropTypes.string
+    required: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string
     ]),
-    message: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    validator: React.PropTypes.func
+    message: PropTypes.string,
+    onChange: PropTypes.func,
+    validator: PropTypes.func
 };
 
 export default Select;

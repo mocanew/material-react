@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './index.scss';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -130,18 +131,18 @@ class Input extends React.Component {
 }
 
 Input.propTypes = {
-    multiline: React.PropTypes.bool,
-    required: React.PropTypes.bool,
-    name: React.PropTypes.string,
-    children: React.PropTypes.string,
-    title: React.PropTypes.string,
-    message: React.PropTypes.string,
-    type: React.PropTypes.string,
-    value: React.PropTypes.string,
-    onBlur: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onInput: React.PropTypes.func,
-    validator: React.PropTypes.func
+    multiline: PropTypes.bool,
+    required: PropTypes.bool,
+    name: PropTypes.string,
+    children: PropTypes.string,
+    title: PropTypes.string,
+    message: PropTypes.string,
+    type: PropTypes.string,
+    value: PropTypes.string,
+    onBlur: PropTypes.func,
+    onChange: PropTypes.func,
+    onInput: PropTypes.func,
+    validator: PropTypes.func
 };
 
 export default Input;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import _ from 'lodash';
 
@@ -27,10 +28,10 @@ class Card extends React.Component {
     }
 }
 Card.propTypes = {
-    shadow: React.PropTypes.bool,
-    children: React.PropTypes.oneOfType([
-        React.PropTypes.arrayOf(React.PropTypes.node),
-        React.PropTypes.node
+    shadow: PropTypes.bool,
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
     ])
 };
 
