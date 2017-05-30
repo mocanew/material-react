@@ -10,6 +10,8 @@ class MaterialButton extends React.Component {
             ripples: [],
             toggleState: false
         };
+        this.rippleTimeouts = [];
+
         this.onMouseDown = this.onMouseDown.bind(this);
         this.updateRipple = this.updateRipple.bind(this);
         this.findFreeRipple = this.findFreeRipple.bind(this);
@@ -31,10 +33,12 @@ class MaterialButton extends React.Component {
         ripple.left = e.left;
 
         this.forceUpdate();
-        setTimeout(() => {
+        var timeoutID = setTimeout(() => {
+            this.rippleTimeouts.splice(this.rippleTimeouts.indexOf(timeoutID), 1);
             ripple.done = true;
             this.forceUpdate();
         }, 1000);
+        this.rippleTimeouts.push(timeoutID);
     }
     createRipple(callback) {
         var ripples = this.state.ripples.concat([]);
@@ -83,6 +87,12 @@ class MaterialButton extends React.Component {
             });
         }
     }
+    componentWillUnmount() {
+        this.rippleTimeouts.forEach(timeoutID => {
+            clearTimeout(timeoutID);
+        });
+        this.rippleTimeouts = [];
+    }
     render() {
         var toggleClass = this.state.toggleState ? this.props.toggleOffClass : this.props.toggleOnClass;
         var classes = classNames(this.props.className, 'materialButton', {
@@ -126,7 +136,7 @@ MaterialButton.propTypes = {
     onClick: PropTypes.func,
     raised: PropTypes.bool,
     flat: PropTypes.bool,
-    ripple: PropTypes.bool,
+    ripple: PropTypes.bool
 };
 MaterialButton.defaultProps = {
     ripple: true
