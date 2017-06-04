@@ -4,6 +4,20 @@ import './index.scss';
 const classNames = require('classnames');
 
 class MaterialButton extends React.Component {
+    static propTypes = {
+        style: PropTypes.object,
+        className: PropTypes.string,
+        children: PropTypes.node,
+        toggleOffClass: PropTypes.string,
+        toggleOnClass: PropTypes.string,
+        onClick: PropTypes.func,
+        raised: PropTypes.bool,
+        flat: PropTypes.bool,
+        ripple: PropTypes.bool
+    }
+    static defaultProps = {
+        ripple: true
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -127,19 +141,5 @@ class MaterialButton extends React.Component {
         );
     }
 }
-MaterialButton.propTypes = {
-    style: PropTypes.object,
-    className: PropTypes.string,
-    children: PropTypes.node,
-    toggleOffClass: PropTypes.string,
-    toggleOnClass: PropTypes.string,
-    onClick: PropTypes.func,
-    raised: PropTypes.bool,
-    flat: PropTypes.bool,
-    ripple: PropTypes.bool
-};
-MaterialButton.defaultProps = {
-    ripple: true
-};
 
 export default MaterialButton;
