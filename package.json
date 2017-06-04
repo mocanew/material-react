@@ -15,6 +15,7 @@
   },
   "scripts": {
     "start": "start-storybook -p 9001",
+    "build-storybook": "build-storybook",
     "scss": "copyfiles -u 1 src/**/*.scss dist/ && copyfiles -u 1 src/_variables.scss dist/",
     "scsslint": "sass-lint -v --no-exit || true",
     "lint": "eslint src/**/*.js src/**/*.jsx",
@@ -27,7 +28,7 @@
   "author": "Valentin Mocanu <mr_vali@yahoo.ro> (http://rontavstudio.com)",
   "license": "MIT",
   "devDependencies": {
-    "@kadira/storybook": "^2.13.0",
+    "@storybook/react": "^3.0.0",
     "autoprefixer": "^6.4.1",
     "babel-cli": "^6.11.4",
     "babel-core": "^6.8.0",
