@@ -1,57 +1,121 @@
+var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var precss = require('precss');
 var path = require('path');
+
+process.browser = true;
 
 var exp = {
     devServer: {
         host: '0.0.0.0',
         port: 8090,
+        disableHostCheck: true,
+        headers: {
+            'Access-Control-Allow-Origin': '*'
+        },
         historyApiFallback: {
-            index: '/'
+            index: 'index.html'
         }
     },
-    devtool: 'source-map',
-    amd: {
-        jQuery: true
+    entry: {
+        bundle: ['babel-polyfill', './public/index.jsx']
     },
+    output: {
+        path: path.join(__dirname, 'assets'),
+        filename: '[name].js',
+        publicPath: '/assets/'
+    },
+    devtool: 'eval',
     module: {
-        preLoaders: [
+        rules: [
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                loader: 'eslint-loader'
-            }
-        ],
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['es2015', 'react']
-                }
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            plugins: [
+                                'syntax-async-functions',
+                                'transform-regenerator',
+                                'transform-class-properties',
+                                'transform-object-rest-spread'
+                            ],
+                            presets: [
+                                'es2015',
+                                'react'
+                            ]
+                        }
+                    }
+                ]
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', 'css', 'postcss', 'sass']
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'postcss-loader',
+                    'sass-loader'
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'postcss-loader',
+                    'less-loader'
+                ]
             },
             {
                 test: /\.css$/,
-                loaders: ['style', 'css', 'postcss']
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'postcss-loader'
+                ]
             },
             {
-                test: /\.(eot|svg|ttf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
-                loader: 'url-loader'
+                test: /\.(png|jpg|gif?)/,
+                use: 'url-loader'
+            },
+            {
+                test: /\.(html|eot|svg|ttf|otf|woff(2)?)(\?v=\d+\.\d+\.\d+)?/,
+                use: 'url-loader'
             }
         ]
     },
-    postcss: function () {
-        return [autoprefixer, precss];
-    },
-    externals: {},
+    plugins: [
+        new webpack.NamedModulesPlugin(),
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: [
+                    autoprefixer(),
+                    precss()
+                ]
+            }
+        })
+    ],
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
+    },
+    performance: {
+        hints: false
     }
 };
+
+// if (process.argv && process.argv.indexOf('--production') != -1) {
+//     exp.plugins.push(
+//         new webpack.DefinePlugin({
+//             'process.env': {
+//                 NODE_ENV: JSON.stringify('production')
+//             }
+//         })
+//     );
+// }
+// else {
+//     exp.entry.webpack = 'webpack-dev-server/client?http://0.0.0.0:8090';
+//     exp.entry.webpackHot = 'webpack/hot/only-dev-server';
+// }
 
 module.exports = exp;
