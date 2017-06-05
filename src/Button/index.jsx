@@ -26,11 +26,16 @@ class MaterialButton extends React.Component {
         };
         this.rippleTimeouts = [];
 
-        this.onMouseDown = this.onMouseDown.bind(this);
-        this.updateRipple = this.updateRipple.bind(this);
-        this.findFreeRipple = this.findFreeRipple.bind(this);
-        this.createRipple = this.createRipple.bind(this);
-        this.onClick = this.onClick.bind(this);
+        var functionsToBind = [
+            'onMouseDown',
+            'updateRipple',
+            'findFreeRipple',
+            'createRipple',
+            'onClick'
+        ];
+        functionsToBind.forEach(fn => {
+            this[fn] = this[fn].bind(this);
+        });
     }
     onClick(e) {
         if (typeof this.props.onClick == 'function') this.props.onClick(e);
