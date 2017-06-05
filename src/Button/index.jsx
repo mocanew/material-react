@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import './index.scss';
-const classNames = require('classnames');
 
 class MaterialButton extends React.Component {
     static propTypes = {
@@ -109,14 +109,14 @@ class MaterialButton extends React.Component {
     }
     render() {
         var toggleClass = this.state.toggleState ? this.props.toggleOffClass : this.props.toggleOnClass;
-        var classes = classNames(this.props.className, 'materialButton', {
+        var classes = classnames(this.props.className, 'materialButton', {
             flat: this.props.flat,
             raised: this.props.raised
         }, toggleClass);
         return (
             <div className={classes} style={this.props.style} onMouseDown={this.onMouseDown} onClick={this.onClick} ref="button">
                 {this.state.ripples.map((e, index) => {
-                    var classes = classNames({
+                    var classes = classnames({
                         ripple: true,
                         animate: e.done == false
                     });
