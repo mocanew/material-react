@@ -86,10 +86,10 @@ class MaterialButton extends React.Component {
             y: event.pageY
         };
         if (this.props.ripple) {
-            var maxWidthHeight = Math.max(this.refs.button.offsetWidth, this.refs.button.offsetWidth);
+            var maxWidthHeight = Math.max(this.button.offsetWidth, this.button.offsetWidth);
 
             this.findFreeRipple((i) => {
-                var rect = this.refs.button.getBoundingClientRect();
+                var rect = this.button.getBoundingClientRect();
                 var x = page.x - window.scrollX - maxWidthHeight / 2 - rect.left;
                 var y = page.y - window.scrollY - maxWidthHeight / 2 - rect.top;
 
@@ -113,8 +113,16 @@ class MaterialButton extends React.Component {
             flat: this.props.flat,
             raised: this.props.raised
         }, toggleClass);
+
         return (
-            <div className={classes} style={this.props.style} onMouseDown={this.onMouseDown} onClick={this.onClick} ref="button">
+            <div
+                style={this.props.style}
+                className={classes}
+                onMouseDown={this.onMouseDown}
+                onClick={this.onClick}
+                ref={(button) => {
+                    this.button = button;
+                }}>
                 {this.state.ripples.map((e, index) => {
                     var classes = classnames({
                         ripple: true,
