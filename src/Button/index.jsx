@@ -30,6 +30,7 @@ class MaterialButton extends React.Component {
         var functionsToBind = [
             'onMouseDown',
             'onMouseUp',
+            'onMouseCancel',
             'onTouchStart',
             'onTouchCancel',
             'onTouchEnd'
@@ -60,6 +61,9 @@ class MaterialButton extends React.Component {
     }
     onMouseUp() {
         this.ripples.onCursorUp();
+    }
+    onMouseCancel() {
+        this.ripples.onCursorUp(true);
     }
     onTouchStart(e) {
         if (!e || !e.targetTouches || !e.targetTouches.length) {
@@ -119,6 +123,7 @@ class MaterialButton extends React.Component {
                 className={classes}
                 onMouseDown={this.onMouseDown}
                 onMouseUp={this.onMouseUp}
+                onMouseLeave={this.onMouseCancel}
                 onTouchStart={this.onTouchStart}
                 onTouchCancel={this.onTouchCancel}
                 onTouchEnd={this.onTouchEnd}
