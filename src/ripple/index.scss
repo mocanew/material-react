@@ -7,7 +7,8 @@
     height: 100%;
     pointer-events: none;
     opacity: 1;
-    transition-duration: 1s;
+    // visibility: hidden;
+    transform: scale(0);
     transition-property: transform, opacity;
     transition-timing-function: $materialTiming;
 
@@ -28,7 +29,7 @@
     }
     &.ending {
         opacity: 0;
-        transform: scale(5);
+        transform: scale(1.25);
     }
     &.canceled {
         opacity: 0;

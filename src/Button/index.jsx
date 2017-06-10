@@ -77,7 +77,7 @@ class MaterialButton extends React.Component {
             x: touches[0].pageX,
             y: touches[0].pageY
         };
-        this.ripples.startRippleAt({
+        this.ripples.onCursorDown({
             x: touches[0].pageX,
             y: touches[0].pageY,
             size: this.size,
@@ -85,17 +85,12 @@ class MaterialButton extends React.Component {
             focus: true
         });
     }
-    onTouchCancel(e) {
-        e.persist();
-        console.log('cancel', e);
+    onTouchCancel() {
+        this.ripples.onCursorUp(true);
     }
     onTouchEnd(e) {
+        this.ripples.onCursorUp();
         e.stopPropagation();
-        this.onMouseDown({
-            pageX: e.pageX,
-            pageY: e.pageY,
-            stopPropagation: () => { }
-        });
         if (!e || !e.targetTouches || !e.targetTouches.length) {
             return;
         }

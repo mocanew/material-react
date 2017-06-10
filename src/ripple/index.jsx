@@ -20,7 +20,7 @@ class RippleController extends React.PureComponent {
         ending: false,
         finished: true,
         focusAnimationDuration: 1000,
-        touchEndAnimationDuration: 1000,
+        touchEndAnimationDuration: 500,
         timeoutID: undefined,
         startTimeoutID: undefined,
     }
@@ -31,6 +31,7 @@ class RippleController extends React.PureComponent {
         this.ripples = {};
         this.rippleIDs = [];
         this.touches = {};
+        this.timeouts = [];
 
         this.startRippleAt = this.startRippleAt.bind(this);
         this.createRipple = this.createRipple.bind(this);
@@ -115,7 +116,7 @@ class RippleController extends React.PureComponent {
         touchID = touchID || 0;
         var ripple = this.touches[touchID];
 
-        if (ripple) {
+        if (ripple && !ripple.finished && !ripple.ending) {
             ripple.starting = false;
             if (ripple.startTimeoutID) {
                 clearTimeout(ripple.startTimeoutID);
@@ -139,29 +140,36 @@ class RippleController extends React.PureComponent {
                 {
                     this.rippleIDs.map((rippleID) => {
                         var ripple = this.ripples[rippleID];
-                        console.log(JSON.stringify(ripple, null, 4));
+                        //console.log(JSON.stringify(ripple, null, 4));
                         var style = {
-                            display: ripple.finished ? 'none' : 'block',
+                            //visibility: ripple.finished ? 'hidden' : 'visible',
                             width: ripple.size,
                             height: ripple.size,
                             top: ripple.y,
                             left: ripple.x,
-                            transitionDuration: ripple.touchEndAnimationDuration + 'ms'
                         };
-                        var innerStyle = {};
-                        var classes = 'ripple';
-                        if (!ripple.finished) {
-                            classes = classnames({
-                                ripple: true,
-                                focus: ripple.focus && !ripple.starting && !ripple.ending,
-                                canceled: ripple.focus && ripple.canceled,
-                                starting: ripple.focus && ripple.starting,
-                                ending: ripple.focus && ripple.ending
-                            });
+                        var innerStyle = {
+                            animationDuration: ripple.focusAnimationDuration + 'ms'
+                        };
 
-                            if (!ripple.focus) {
-                                innerStyle.animationDuration = ripple.touchEndAnimationDuration + 'ms';
+                        var classes = 'ripple';
+                        if (ripple.renderedOnce) {
+                            if (!ripple.finished) {
+                                classes = classnames({
+                                    ripple: true,
+                                    focus: ripple.focus && !ripple.starting && !ripple.ending && !ripple.canceled,
+                                    canceled: ripple.focus && ripple.canceled,
+                                    starting: ripple.focus && ripple.starting,
+                                    ending: ripple.focus && ripple.ending
+                                });
+                                style.transitionDuration = ripple.touchEndAnimationDuration + 'ms';
                             }
+                        }
+                        else {
+                            this.timeouts.push(setTimeout(() => {
+                                ripple.renderedOnce = true;
+                                this.forceUpdate();
+                            }));
                         }
 
                         return (
