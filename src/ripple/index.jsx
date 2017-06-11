@@ -23,6 +23,7 @@ class RippleController extends React.PureComponent {
         touchEndAnimationDuration: 500,
         timeoutID: undefined,
         startTimeoutID: undefined,
+        renderedOnce: false
     }
     constructor() {
         super();
@@ -63,6 +64,7 @@ class RippleController extends React.PureComponent {
     endRippleAnimation(ripple) {
         ripple.timeoutID = setTimeout(() => {
             ripple.timeoutID = undefined;
+            ripple.renderedOnce = false;
             ripple.ending = false;
             ripple.finished = true;
             this.forceUpdate();
@@ -121,9 +123,9 @@ class RippleController extends React.PureComponent {
             if (ripple.startTimeoutID) {
                 clearTimeout(ripple.startTimeoutID);
             }
+
             ripple.ending = true;
             ripple.canceled = cancel;
-
             this.forceUpdate();
             this.endRippleAnimation(ripple);
         }
@@ -140,9 +142,8 @@ class RippleController extends React.PureComponent {
                 {
                     this.rippleIDs.map((rippleID) => {
                         var ripple = this.ripples[rippleID];
-                        //console.log(JSON.stringify(ripple, null, 4));
                         var style = {
-                            //visibility: ripple.finished ? 'hidden' : 'visible',
+                            display: ripple.finished ? 'none' : 'block',
                             width: ripple.size,
                             height: ripple.size,
                             top: ripple.y,
@@ -153,8 +154,8 @@ class RippleController extends React.PureComponent {
                         };
 
                         var classes = 'ripple';
-                        if (ripple.renderedOnce) {
-                            if (!ripple.finished) {
+                        if (!ripple.finished) {
+                            if (ripple.renderedOnce) {
                                 classes = classnames({
                                     ripple: true,
                                     focus: ripple.focus && !ripple.starting && !ripple.ending && !ripple.canceled,
@@ -164,12 +165,12 @@ class RippleController extends React.PureComponent {
                                 });
                                 style.transitionDuration = ripple.touchEndAnimationDuration + 'ms';
                             }
-                        }
-                        else {
-                            this.timeouts.push(setTimeout(() => {
-                                ripple.renderedOnce = true;
-                                this.forceUpdate();
-                            }));
+                            else {
+                                this.timeouts.push(setTimeout(() => {
+                                    ripple.renderedOnce = true;
+                                    this.forceUpdate();
+                                }));
+                            }
                         }
 
                         return (
