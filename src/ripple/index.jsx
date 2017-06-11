@@ -30,6 +30,7 @@ class RippleController extends React.PureComponent {
 
         this.rippleCount = 0;
         this.ripples = {};
+        this.renderedRipples = {};
         this.rippleIDs = [];
         this.touches = {};
         this.timeouts = [];
@@ -40,6 +41,7 @@ class RippleController extends React.PureComponent {
         this.updateRipple = this.updateRipple.bind(this);
         this.endRippleAnimation = this.endRippleAnimation.bind(this);
         this.endRipple = this.endRipple.bind(this);
+        this.updateRippleRender = this.renderRipple.bind(this);
 
         this.onCursorDown = this.onCursorDown.bind(this);
         this.onCursorUp = this.onCursorUp.bind(this);
@@ -67,11 +69,10 @@ class RippleController extends React.PureComponent {
             ripple.renderedOnce = false;
             ripple.ending = false;
             ripple.finished = true;
-            this.forceUpdate();
+            this.renderRipple(ripple);
         }, ripple.touchEndAnimationDuration);
     }
     updateRipple(newRipple, animationDuration) {
-        // console.log('update', newRipple, animationDuration);
         var ripple = this.findFreeRipple();
 
         ripple.x = newRipple.x;
@@ -84,13 +85,13 @@ class RippleController extends React.PureComponent {
         ripple.starting = true;
         ripple.canceled = false;
 
-        this.forceUpdate();
+        this.renderRipple(ripple);
 
         if (newRipple.focus) {
             ripple.startTimeoutID = setTimeout(() => {
                 ripple.startTimeoutID = undefined;
                 ripple.starting = false;
-                this.forceUpdate();
+                this.renderRipple(ripple);
             }, ripple.touchEndAnimationDuration);
         }
         else {
@@ -126,9 +127,48 @@ class RippleController extends React.PureComponent {
 
             ripple.ending = true;
             ripple.canceled = cancel;
-            this.forceUpdate();
+            this.renderRipple(ripple);
             this.endRippleAnimation(ripple);
         }
+    }
+    renderRipple(ripple) {
+        var style = {
+            display: ripple.finished ? 'none' : 'block',
+            width: ripple.size,
+            height: ripple.size,
+            top: ripple.y,
+            left: ripple.x,
+        };
+        var innerStyle = {
+            animationDuration: ripple.focusAnimationDuration + 'ms'
+        };
+
+        var classes = 'ripple';
+        if (!ripple.finished) {
+            if (ripple.renderedOnce) {
+                classes = classnames({
+                    ripple: true,
+                    focus: ripple.focus && !ripple.starting && !ripple.ending && !ripple.canceled,
+                    canceled: ripple.focus && ripple.canceled,
+                    starting: ripple.focus && ripple.starting,
+                    ending: ripple.focus && ripple.ending
+                });
+                style.transitionDuration = ripple.touchEndAnimationDuration + 'ms';
+            }
+            else {
+                this.timeouts.push(setTimeout(() => {
+                    ripple.renderedOnce = true;
+                    this.renderRipple(ripple);
+                }));
+            }
+        }
+
+        this.renderedRipples[ripple.id] = (
+            <span className={classes} style={style} key={ripple.id}>
+                <span className="innerRipple" style={innerStyle} />
+            </span>
+        );
+        this.forceUpdate();
     }
     onCursorDown(options) {
         this.startRippleAt(options);
@@ -140,45 +180,7 @@ class RippleController extends React.PureComponent {
         return (
             <span>
                 {
-                    this.rippleIDs.map((rippleID) => {
-                        var ripple = this.ripples[rippleID];
-                        var style = {
-                            display: ripple.finished ? 'none' : 'block',
-                            width: ripple.size,
-                            height: ripple.size,
-                            top: ripple.y,
-                            left: ripple.x,
-                        };
-                        var innerStyle = {
-                            animationDuration: ripple.focusAnimationDuration + 'ms'
-                        };
-
-                        var classes = 'ripple';
-                        if (!ripple.finished) {
-                            if (ripple.renderedOnce) {
-                                classes = classnames({
-                                    ripple: true,
-                                    focus: ripple.focus && !ripple.starting && !ripple.ending && !ripple.canceled,
-                                    canceled: ripple.focus && ripple.canceled,
-                                    starting: ripple.focus && ripple.starting,
-                                    ending: ripple.focus && ripple.ending
-                                });
-                                style.transitionDuration = ripple.touchEndAnimationDuration + 'ms';
-                            }
-                            else {
-                                this.timeouts.push(setTimeout(() => {
-                                    ripple.renderedOnce = true;
-                                    this.forceUpdate();
-                                }));
-                            }
-                        }
-
-                        return (
-                            <span className={classes} style={style} key={rippleID}>
-                                <span className="innerRipple" style={innerStyle} />
-                            </span>
-                        );
-                    })
+                    this.rippleIDs.map((rippleID) => this.renderedRipples[rippleID])
                 }
             </span>
         );
