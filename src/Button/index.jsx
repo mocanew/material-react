@@ -25,7 +25,6 @@ class MaterialButton extends React.Component {
         this.state = {
             ripples: []
         };
-        this.rippleTimeouts = [];
 
         var functionsToBind = [
             'onMouseDown',
@@ -39,19 +38,16 @@ class MaterialButton extends React.Component {
             this[fn] = this[fn].bind(this);
         });
     }
-    // onClick(e) {
-    //     if (typeof this.props.onClick == 'function') this.props.onClick(e);
-    //     this.setState({
-    //         toggleState: !this.state.toggleState
-    //     });
-    // }
+    componentDidMount() {
+        this.componentDidUpdate();
+    }
     componentDidUpdate() {
-        console.log('update');
+        console.log('Button update');
         this.buttonRect = this.button.getBoundingClientRect();
         this.size = Math.max(this.button.offsetWidth, this.button.offsetWidth);
     }
     onMouseDown(e) {
-        this.ripples.onCursorDown({
+        this.rippleController.onCursorDown({
             x: e.pageX,
             y: e.pageY,
             size: this.size,
@@ -60,24 +56,26 @@ class MaterialButton extends React.Component {
         });
     }
     onMouseUp() {
-        this.ripples.onCursorUp();
+        this.rippleController.onCursorUp();
     }
     onMouseCancel() {
-        this.ripples.onCursorUp(true);
+        this.rippleController.onCursorUp({
+            cancel: true
+        });
     }
     onTouchStart(e) {
         if (!e || !e.targetTouches || !e.targetTouches.length) {
             return;
         }
         e.persist();
+        console.log(e.targetTouches);
         var touches = e.targetTouches;
         this.touchID = touches[0].identifier;
-        // console.log(touches[0]);
         this.touchStart = {
             x: touches[0].pageX,
             y: touches[0].pageY
         };
-        this.ripples.onCursorDown({
+        this.rippleController.onCursorDown({
             x: touches[0].pageX,
             y: touches[0].pageY,
             size: this.size,
@@ -86,42 +84,40 @@ class MaterialButton extends React.Component {
         });
     }
     onTouchCancel() {
-        this.ripples.onCursorUp(true);
+        this.rippleController.onCursorUp({
+            cancel: true
+        });
     }
     onTouchEnd(e) {
-        this.ripples.onCursorUp();
-        e.stopPropagation();
-        if (!e || !e.targetTouches || !e.targetTouches.length) {
-            return;
-        }
-        var touches = e.targetTouches;
-        if (touches.indexOf(this.touchID)) {
-            this.touchID = undefined;
-            this.touchStart = undefined;
-        }
-    }
-    componentWillUnmount() {
-        this.rippleTimeouts.forEach(timeoutID => {
-            clearTimeout(timeoutID);
-        });
-        this.rippleTimeouts = [];
+        this.rippleController.onCursorUp();
+        e.persist();
+        console.log(e.targetTouches);
     }
     render() {
         var classes = classnames(this.props.className, 'materialButton', {
             flat: this.props.flat,
             raised: this.props.raised
         });
+        var eventListeners;
+        if (this.props.ripple) {
+            eventListeners = {
+                onMouseDown: this.onMouseDown,
+                onMouseUp: this.onMouseUp,
+                onMouseLeave: this.onMouseCancel,
+                onTouchStart: this.onTouchStart,
+                onTouchCancel: this.onTouchCancel,
+                onTouchEnd: this.onTouchEnd
+            };
+        }
+        else {
+            eventListeners = {};
+        }
 
         return (
             <div
                 style={this.props.style}
                 className={classes}
-                onMouseDown={this.onMouseDown}
-                onMouseUp={this.onMouseUp}
-                onMouseLeave={this.onMouseCancel}
-                onTouchStart={this.onTouchStart}
-                onTouchCancel={this.onTouchCancel}
-                onTouchEnd={this.onTouchEnd}
+                {...eventListeners}
                 ref={(button) => {
                     this.button = button;
                 }}>
@@ -129,7 +125,7 @@ class MaterialButton extends React.Component {
                     this.props.ripple ?
                         <RippleController
                             ref={(ripples) => {
-                                this.ripples = ripples;
+                                this.rippleController = ripples;
                             }}
                         />
                         : ''

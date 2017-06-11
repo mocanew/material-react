@@ -46,6 +46,22 @@ class RippleController extends React.PureComponent {
         this.onCursorDown = this.onCursorDown.bind(this);
         this.onCursorUp = this.onCursorUp.bind(this);
     }
+    componentWillUnmount() {
+        var i;
+        for (i = 0; i < this.timeouts.length; i++) {
+            clearTimeout(this.timeouts[i]);
+        }
+        for (i = 0; i < this.rippleIDs; i++) {
+            var ripple = this.ripples[i];
+            if (ripple.timeoutID) {
+                clearTimeout(ripple.timeoutID);
+            }
+            if (ripple.startTimeoutID) {
+                clearTimeout(ripple.startTimeoutID);
+            }
+        }
+        this.unmounted = true;
+    }
     createRipple() {
         var id = this.rippleCount++;
 
@@ -168,13 +184,16 @@ class RippleController extends React.PureComponent {
                 <span className="innerRipple" style={innerStyle} />
             </span>
         );
-        this.forceUpdate();
+        if (!this.unmounted) {
+            this.forceUpdate();
+        }
     }
     onCursorDown(options) {
         this.startRippleAt(options);
     }
-    onCursorUp(cancel, touchID) {
-        this.endRipple(touchID, cancel);
+    onCursorUp(options) {
+        options = options || {};
+        this.endRipple(options.touchID, options.cancel);
     }
     render() {
         return (
