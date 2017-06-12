@@ -120,19 +120,19 @@ class RippleController extends React.PureComponent {
         return ripple;
     }
     startRippleAt(options) {
-        var x = options.x - window.scrollX - options.size / 2 - options.rect.left;
-        var y = options.y - window.scrollY - options.size / 2 - options.rect.top;
+        var rect = options.parent.getBoundingClientRect();
+        var size = Math.max(options.parent.offsetWidth, options.parent.offsetHeight);
+
+        var x = options.x - window.scrollX - size / 2 - rect.left;
+        var y = options.y - window.scrollY - size / 2 - rect.top;
 
         var ripple = this.updateRipple({
             x: x,
             y: y,
-            size: options.size,
+            size: size,
             focus: options.focus
         });
         var touchID = options.touchID || 0;
-        // if (this.touches[touchID]) {
-        //     this.endRipple(touchID);
-        // }
         this.touches[touchID] = ripple;
     }
     endRipple(touchID, cancel) {

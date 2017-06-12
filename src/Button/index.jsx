@@ -38,20 +38,11 @@ class MaterialButton extends React.Component {
             this[fn] = this[fn].bind(this);
         });
     }
-    componentDidMount() {
-        this.componentDidUpdate();
-    }
-    componentDidUpdate() {
-        console.log('Button update');
-        this.buttonRect = this.button.getBoundingClientRect();
-        this.size = Math.max(this.button.offsetWidth, this.button.offsetWidth);
-    }
     onMouseDown(e) {
         this.rippleController.onCursorDown({
             x: e.pageX,
             y: e.pageY,
-            size: this.size,
-            rect: this.buttonRect,
+            parent: this.button,
             focus: true
         });
     }
@@ -78,9 +69,8 @@ class MaterialButton extends React.Component {
         this.rippleController.onCursorDown({
             x: touches[0].pageX,
             y: touches[0].pageY,
-            size: this.size,
-            rect: this.buttonRect,
-            focus: true
+                parent: this.button,
+                focus: true
         });
     }
     onTouchCancel() {
