@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import RippleController from '../ripple/';
 import './index.scss';
 
-class MaterialButton extends React.Component {
+class Button extends React.Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
@@ -20,11 +20,20 @@ class MaterialButton extends React.Component {
         raised: false,
         onClick: () => { }
     }
+    static getTouchIDs(touches) {
+        var result = [];
+        for (var i = 0; i < touches.length; i++) {
+            result.push(touches[i].identifier);
+        }
+        return result;
+    }
     constructor(props) {
         super(props);
         this.state = {
             ripples: []
         };
+        this.touch = false;
+        this.touches = [];
 
         var functionsToBind = [
             'onMouseDown',
@@ -39,6 +48,10 @@ class MaterialButton extends React.Component {
         });
     }
     onMouseDown(e) {
+        if (this.touch) {
+            return;
+        }
+
         this.rippleController.onCursorDown({
             x: e.pageX,
             y: e.pageY,
@@ -47,41 +60,66 @@ class MaterialButton extends React.Component {
         });
     }
     onMouseUp() {
+        if (this.touch) {
+            return;
+        }
+
         this.rippleController.onCursorUp();
     }
     onMouseCancel() {
+        if (this.touch) {
+            return;
+        }
+
         this.rippleController.onCursorUp({
             cancel: true
         });
     }
     onTouchStart(e) {
+        this.touch = true;
         if (!e || !e.targetTouches || !e.targetTouches.length) {
             return;
         }
-        e.persist();
-        console.log(e.targetTouches);
-        var touches = e.targetTouches;
-        this.touchID = touches[0].identifier;
-        this.touchStart = {
-            x: touches[0].pageX,
-            y: touches[0].pageY
-        };
-        this.rippleController.onCursorDown({
-            x: touches[0].pageX,
-            y: touches[0].pageY,
+        var touches = Button.getTouchIDs(e.targetTouches);
+
+        for (var i = 0; i < touches.length; i++) {
+            if (this.touches.indexOf(touches[i]) >= 0) {
+                continue;
+            }
+            this.rippleController.onCursorDown({
+                touchID: touches[i],
+                x: e.targetTouches[i].pageX,
+                y: e.targetTouches[i].pageY,
                 parent: this.button,
                 focus: true
-        });
+            });
+        }
+        this.touches = touches;
     }
-    onTouchCancel() {
-        this.rippleController.onCursorUp({
-            cancel: true
-        });
+    onTouchCancel(e) {
+        var touches = Button.getTouchIDs(e.targetTouches);
+
+        for (var i = 0; i < this.touches.length; i++) {
+            if (touches.indexOf(this.touches[i]) == -1) {
+                this.rippleController.onCursorUp({
+                    touchID: this.touches[i],
+                    cancel: true
+                });
+            }
+        }
+        this.touches = touches;
     }
     onTouchEnd(e) {
-        this.rippleController.onCursorUp();
-        e.persist();
-        console.log(e.targetTouches);
+        var touches = Button.getTouchIDs(e.targetTouches);
+
+        for (var i = 0; i < this.touches.length; i++) {
+            if (touches.indexOf(this.touches[i]) == -1) {
+                this.rippleController.onCursorUp({
+                    touchID: this.touches[i]
+                });
+            }
+        }
+        this.touches = touches;
     }
     render() {
         var classes = classnames(this.props.className, 'materialButton', {
@@ -134,4 +172,4 @@ class MaterialButton extends React.Component {
     }
 }
 
-export default MaterialButton;
+export default Button;

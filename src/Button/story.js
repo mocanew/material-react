@@ -42,6 +42,11 @@ storiesOf('Button', module)
             <Button raised>Raised button</Button>
         </div>
     ))
+    .add('Big button (multi-touch test)', () => (
+        <div>
+            <Button raised className="bigButton">BIG button</Button>
+        </div>
+    ))
     .add('Ripple & no ripple', () => (
         <div>
             <Button raised ripple={false}>No ripple button</Button>
