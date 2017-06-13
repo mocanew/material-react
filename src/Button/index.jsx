@@ -60,13 +60,13 @@ class Button extends React.Component {
             focus: true
         });
     }
-    onMouseUp() {
+    onMouseUp(e) {
         if (this.touch) {
             return;
         }
 
         this.rippleController.onCursorUp();
-        this.props.onClick();
+        this.props.onClick(e);
     }
     onMouseCancel() {
         if (this.touch) {
@@ -119,7 +119,7 @@ class Button extends React.Component {
                 this.rippleController.onCursorUp({
                     touchID: this.touches[i]
                 });
-                this.props.onClick();
+                this.props.onClick(e);
             }
         }
         this.touches = touches;
