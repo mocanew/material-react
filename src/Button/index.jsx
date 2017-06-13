@@ -12,7 +12,8 @@ class Button extends React.Component {
         onClick: PropTypes.func,
         raised: PropTypes.bool,
         flat: PropTypes.bool,
-        ripple: PropTypes.bool
+        ripple: PropTypes.bool,
+        disabled: PropTypes.bool
     }
     static defaultProps = {
         ripple: true,
@@ -126,10 +127,11 @@ class Button extends React.Component {
     render() {
         var classes = classnames(this.props.className, 'materialButton', {
             flat: this.props.flat,
-            raised: this.props.raised
+            raised: this.props.raised,
+            disabled: this.props.disabled
         });
         var eventListeners;
-        if (this.props.ripple) {
+        if (this.props.ripple && !this.props.disabled) {
             eventListeners = {
                 onMouseDown: this.onMouseDown,
                 onMouseUp: this.onMouseUp,
@@ -152,7 +154,7 @@ class Button extends React.Component {
                     this.button = button;
                 }}>
                 {
-                    this.props.ripple ?
+                    this.props.ripple && !this.props.disabled ?
                         <RippleController
                             ref={(ripples) => {
                                 this.rippleController = ripples;
