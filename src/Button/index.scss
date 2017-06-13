@@ -16,9 +16,6 @@
     > span {
         overflow: hidden;
     }
-    .ripple {
-        background: rgba($black, 0.2);
-    }
     i {
         vertical-align: middle;
         outline: 0;
@@ -219,27 +216,5 @@
             transform: rotate(45deg);
             transform-origin: 100% 100%;
         }
-    }
-}
-
-.ripple {
-    position: absolute;
-    display: block;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background: #CCC;
-    border-radius: 100%;
-    transform: scale(0);
-
-    &.animate {
-        animation: ripple 1s ease-out;
-    }
-}
-
-@keyframes ripple {
-    100% {
-        opacity: 0;
-        transform: scale(2.5);
     }
 }

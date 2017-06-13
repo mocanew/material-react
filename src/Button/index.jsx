@@ -1,146 +1,165 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import RippleController from '../ripple/';
 import './index.scss';
 
-class MaterialButton extends React.Component {
+class Button extends React.Component {
     static propTypes = {
         style: PropTypes.object,
         className: PropTypes.string,
         children: PropTypes.node,
-        toggleOffClass: PropTypes.string,
-        toggleOnClass: PropTypes.string,
         onClick: PropTypes.func,
         raised: PropTypes.bool,
         flat: PropTypes.bool,
         ripple: PropTypes.bool
     }
     static defaultProps = {
-        ripple: true
+        ripple: true,
+        flat: false,
+        raised: false,
+        onClick: () => { }
+    }
+    static getTouchIDs(touches) {
+        var result = [];
+        for (var i = 0; i < touches.length; i++) {
+            result.push(touches[i].identifier);
+        }
+        return result;
     }
     constructor(props) {
         super(props);
         this.state = {
-            ripples: [],
-            toggleState: false
+            ripples: []
         };
-        this.rippleTimeouts = [];
+        this.touch = false;
+        this.touches = [];
 
         var functionsToBind = [
             'onMouseDown',
-            'updateRipple',
-            'findFreeRipple',
-            'createRipple',
-            'onClick'
+            'onMouseUp',
+            'onMouseCancel',
+            'onTouchStart',
+            'onTouchCancel',
+            'onTouchEnd'
         ];
         functionsToBind.forEach(fn => {
             this[fn] = this[fn].bind(this);
         });
     }
-    onClick(e) {
-        if (typeof this.props.onClick == 'function') this.props.onClick(e);
-        this.setState({
-            toggleState: !this.state.toggleState
-        });
-    }
-    updateRipple(e, index) {
-        var ripple = this.state.ripples[index];
-
-        ripple.done = false;
-        ripple.size = e.size;
-        ripple.top = e.top;
-        ripple.left = e.left;
-
-        this.forceUpdate();
-        var timeoutID = setTimeout(() => {
-            this.rippleTimeouts.splice(this.rippleTimeouts.indexOf(timeoutID), 1);
-            ripple.done = true;
-            this.forceUpdate();
-        }, 1000);
-        this.rippleTimeouts.push(timeoutID);
-    }
-    createRipple(callback) {
-        var ripples = this.state.ripples.concat([]);
-        ripples.push({
-            size: 0,
-            top: 0,
-            left: 0,
-            done: true
-        });
-        this.setState({
-            ripples: ripples
-        }, () => callback(this.state.ripples.length - 1));
-    }
-    findFreeRipple(callback) {
-        var i = 0;
-        if (!this.state.ripples.length) {
-            return this.createRipple(callback);
+    onMouseDown(e) {
+        if (this.touch) {
+            return;
         }
 
-        for (i = 0; i < this.state.ripples.length; i++) {
-            if (this.state.ripples[i].done == true) {
-                return callback(i);
+        this.rippleController.onCursorDown({
+            x: e.pageX,
+            y: e.pageY,
+            parent: this.button,
+            focus: true
+        });
+    }
+    onMouseUp() {
+        if (this.touch) {
+            return;
+        }
+
+        this.rippleController.onCursorUp();
+        this.props.onClick();
+    }
+    onMouseCancel() {
+        if (this.touch) {
+            return;
+        }
+
+        this.rippleController.onCursorUp({
+            cancel: true
+        });
+    }
+    onTouchStart(e) {
+        this.touch = true;
+        if (!e || !e.targetTouches || !e.targetTouches.length) {
+            return;
+        }
+        var touches = Button.getTouchIDs(e.targetTouches);
+
+        for (var i = 0; i < touches.length; i++) {
+            if (this.touches.indexOf(touches[i]) >= 0) {
+                continue;
             }
-        }
-        this.createRipple(callback);
-    }
-    onMouseDown(event) {
-        event.stopPropagation();
-        var page = {
-            x: event.pageX,
-            y: event.pageY
-        };
-        if (this.props.ripple) {
-            var maxWidthHeight = Math.max(this.button.offsetWidth, this.button.offsetWidth);
-
-            this.findFreeRipple((i) => {
-                var rect = this.button.getBoundingClientRect();
-                var x = page.x - window.scrollX - maxWidthHeight / 2 - rect.left;
-                var y = page.y - window.scrollY - maxWidthHeight / 2 - rect.top;
-
-                this.updateRipple({
-                    size: maxWidthHeight,
-                    top: y,
-                    left: x
-                }, i);
+            this.rippleController.onCursorDown({
+                touchID: touches[i],
+                x: e.targetTouches[i].pageX,
+                y: e.targetTouches[i].pageY,
+                parent: this.button,
+                focus: true
             });
         }
+        this.touches = touches;
     }
-    componentWillUnmount() {
-        this.rippleTimeouts.forEach(timeoutID => {
-            clearTimeout(timeoutID);
-        });
-        this.rippleTimeouts = [];
+    onTouchCancel(e) {
+        var touches = Button.getTouchIDs(e.targetTouches);
+
+        for (var i = 0; i < this.touches.length; i++) {
+            if (touches.indexOf(this.touches[i]) == -1) {
+                this.rippleController.onCursorUp({
+                    touchID: this.touches[i],
+                    cancel: true
+                });
+            }
+        }
+        this.touches = touches;
+    }
+    onTouchEnd(e) {
+        var touches = Button.getTouchIDs(e.targetTouches);
+
+        for (var i = 0; i < this.touches.length; i++) {
+            if (touches.indexOf(this.touches[i]) == -1) {
+                this.rippleController.onCursorUp({
+                    touchID: this.touches[i]
+                });
+                this.props.onClick();
+            }
+        }
+        this.touches = touches;
     }
     render() {
-        var toggleClass = this.state.toggleState ? this.props.toggleOffClass : this.props.toggleOnClass;
         var classes = classnames(this.props.className, 'materialButton', {
             flat: this.props.flat,
             raised: this.props.raised
-        }, toggleClass);
+        });
+        var eventListeners;
+        if (this.props.ripple) {
+            eventListeners = {
+                onMouseDown: this.onMouseDown,
+                onMouseUp: this.onMouseUp,
+                onMouseLeave: this.onMouseCancel,
+                onTouchStart: this.onTouchStart,
+                onTouchCancel: this.onTouchCancel,
+                onTouchEnd: this.onTouchEnd
+            };
+        }
+        else {
+            eventListeners = {};
+        }
 
         return (
             <div
                 style={this.props.style}
                 className={classes}
-                onMouseDown={this.onMouseDown}
-                onClick={this.onClick}
+                {...eventListeners}
                 ref={(button) => {
                     this.button = button;
                 }}>
-                {this.state.ripples.map((e, index) => {
-                    var classes = classnames({
-                        ripple: true,
-                        animate: e.done == false
-                    });
-                    var style = {
-                        width: e.size,
-                        height: e.size,
-                        top: e.top,
-                        left: e.left
-                    };
-                    return <b className={classes} style={style} key={index} ></b>;
-                })}
+                {
+                    this.props.ripple ?
+                        <RippleController
+                            ref={(ripples) => {
+                                this.rippleController = ripples;
+                            }}
+                        />
+                        : ''
+                }
                 {this.props.children}
                 {
                     classes.indexOf('iconBtn') >= 0 ?
@@ -155,4 +174,4 @@ class MaterialButton extends React.Component {
     }
 }
 
-export default MaterialButton;
+export default Button;

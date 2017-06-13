@@ -1,0 +1,58 @@
+@import '../variables';
+
+.ripple {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 1;
+    transform: scale(0);
+    transition-property: transform, opacity;
+    transition-timing-function: $materialTiming;
+
+    .innerRipple {
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        pointer-events: none;
+        background: rgba($black, 0.2);
+        border-radius: 100%;
+        animation-iteration-count: infinite;
+        animation-name: rippleFocus;
+        animation-play-state: paused;
+        animation-timing-function: $materialTiming;
+    }
+    &.starting {
+        transform: scale(1);
+    }
+    &.ending {
+        opacity: 0;
+        transform: scale(2);
+    }
+    &.canceled {
+        opacity: 0;
+        transform: scale(0);
+    }
+    &.focus {
+        transform: scale(1);
+
+        .innerRipple {
+            animation-play-state: running;
+        }
+    }
+}
+
+@keyframes rippleFocus {
+    0% {
+        transform: scale(0.5);
+    }
+    50% {
+        transform: scale(0.55);
+    }
+    100% {
+        transform: scale(0.5);
+    }
+}
