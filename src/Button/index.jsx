@@ -165,7 +165,7 @@ class Button extends React.Component {
                 {this.props.children}
                 {
                     classes.indexOf('iconBtn') >= 0 ?
-                        <span>
+                        <span className="icon">
                             <span className="s1"></span>
                             <span className="s2"></span>
                             <span className="s3"></span>
