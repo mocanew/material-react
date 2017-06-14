@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, boolean, select } from '@storybook/addon-knobs';
+import { withKnobs, boolean, select, number } from '@storybook/addon-knobs';
 import Button from './index.jsx';
 
 import '../_story.scss';
@@ -52,15 +52,24 @@ class StressTest extends React.Component {
             i: 1
         };
     }
-    componentWillMount() {
+    componentDidMount() {
+        this.componentWillReceiveProps(this.props);
+    }
+    componentWillReceiveProps(newProps) {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+
         this.interval = setInterval(() => {
             this.setState({
-                i: this.state.i + 1
+                i: (this.state.i + 1) % 2
             });
-        }, 5000);
+        }, newProps.interval);
     }
     componentWillUnmount() {
-        clearInterval(this.interval);
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
     }
     render() {
         if (this.state.i % 2 == 0) {
@@ -69,9 +78,14 @@ class StressTest extends React.Component {
 
         return (
             <div>
-                <Button raised>Ripple button(default)</Button>
+                <Button raised>Button</Button>
             </div>
         );
     }
 }
-stories.add('Unmount cleanup test', () => <StressTest />);
+stories.add('Unmount cleanup test', () => <StressTest interval={number('Frequency', 5000, {
+    range: true,
+    min: 100,
+    max: 10000,
+    step: 1
+})} />);
