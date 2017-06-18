@@ -32,6 +32,27 @@ class Select extends React.Component {
         onChange: PropTypes.func,
         validator: PropTypes.func
     }
+    static defaultProps = {
+        onChange: () => { },
+        validator: Select.defaultValidator
+    }
+    static cumulativeOffset(element) {
+        var top = 0, left = 0;
+        do {
+            top += element.offsetTop || 0;
+            left += element.offsetLeft || 0;
+            element = element.offsetParent;
+        } while (element);
+
+        return {
+            top: top,
+            left: left
+        };
+    }
+    static defaultValidator(e) {
+        e = e.text;
+        return e && e.length <= 0;
+    }
     constructor(props) {
         super(props);
         var defaults = {
@@ -54,27 +75,11 @@ class Select extends React.Component {
         this.parseOptions(state.options, state);
         this.state = state;
 
-        this.validator = _.isFunction(props.validator) ? props.validator : this.defaultValidator.bind(this);
-        this.onChange = _.isFunction(props.onChange) ? props.onChange : () => { };
-
         this.parseOptions = this.parseOptions.bind(this);
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
         this.clickLi = this.clickLi.bind(this);
         this.clickBody = this.clickBody.bind(this);
-    }
-    static cumulativeOffset(element) {
-        var top = 0, left = 0;
-        do {
-            top += element.offsetTop || 0;
-            left += element.offsetLeft || 0;
-            element = element.offsetParent;
-        } while (element);
-
-        return {
-            top: top,
-            left: left
-        };
     }
     parseOptions(options, state) {
         _.each(options, (value, key) => {
@@ -112,10 +117,6 @@ class Select extends React.Component {
         });
         return options;
     }
-    defaultValidator(e) {
-        e = e.text;
-        return e && e.length <= 0;
-    }
     close() {
         if (!this.state.open) {
             return;
@@ -131,7 +132,7 @@ class Select extends React.Component {
         smoothscroll(0, this.state.animationDuration, null, this.select);
 
         this.setState({
-            error: this.validator(this.state.selected.text) || (this.state.required && this.state.selected == this.state.placeholder)
+            error: this.props.validator(this.state.selected.text) || (this.state.required && this.state.selected == this.state.placeholder)
         });
     }
     open() {
@@ -161,7 +162,7 @@ class Select extends React.Component {
                 selected: selected
             });
 
-            this.onChange(this.state.selected.text, this.state.selected);
+            this.props.onChange(this.state.selected.text, this.state.selected);
             this.close();
             e.stopPropagation();
         }
