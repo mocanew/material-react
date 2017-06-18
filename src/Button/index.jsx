@@ -55,19 +55,23 @@ class Button extends React.Component {
             return;
         }
 
-        this.rippleController.onCursorDown({
-            x: e.pageX,
-            y: e.pageY,
-            parent: this.button,
-            focus: true
-        });
+        if (this.props.ripple) {
+            this.rippleController.onCursorDown({
+                x: e.pageX,
+                y: e.pageY,
+                parent: this.button,
+                focus: true
+            });
+        }
     }
     onMouseUp(e) {
         if (this.touch) {
             return;
         }
 
-        this.rippleController.onCursorUp();
+        if (this.props.ripple) {
+            this.rippleController.onCursorUp();
+        }
         this.props.onClick(e);
     }
     onMouseCancel() {
@@ -75,9 +79,11 @@ class Button extends React.Component {
             return;
         }
 
-        this.rippleController.onCursorUp({
-            cancel: true
-        });
+        if (this.props.ripple) {
+            this.rippleController.onCursorUp({
+                cancel: true
+            });
+        }
     }
     onTouchStart(e) {
         this.touch = true;
@@ -87,9 +93,10 @@ class Button extends React.Component {
         var touches = Button.getTouchIDs(e.targetTouches);
 
         for (var i = 0; i < touches.length; i++) {
-            if (this.touches.indexOf(touches[i]) >= 0) {
+            if (!this.props.ripple || this.touches.indexOf(touches[i]) >= 0) {
                 continue;
             }
+
             this.rippleController.onCursorDown({
                 touchID: touches[i],
                 x: e.targetTouches[i].pageX,
@@ -104,7 +111,7 @@ class Button extends React.Component {
         var touches = Button.getTouchIDs(e.targetTouches);
 
         for (var i = 0; i < this.touches.length; i++) {
-            if (touches.indexOf(this.touches[i]) == -1) {
+            if (this.props.ripple && touches.indexOf(this.touches[i]) == -1) {
                 this.rippleController.onCursorUp({
                     touchID: this.touches[i],
                     cancel: true
@@ -118,9 +125,11 @@ class Button extends React.Component {
 
         for (var i = 0; i < this.touches.length; i++) {
             if (touches.indexOf(this.touches[i]) == -1) {
-                this.rippleController.onCursorUp({
-                    touchID: this.touches[i]
-                });
+                if (this.props.ripple) {
+                    this.rippleController.onCursorUp({
+                        touchID: this.touches[i]
+                    });
+                }
                 this.props.onClick(e);
             }
         }
@@ -133,7 +142,7 @@ class Button extends React.Component {
             disabled: this.props.disabled
         });
         var eventListeners;
-        if (this.props.ripple && !this.props.disabled) {
+        if (!this.props.disabled) {
             eventListeners = {
                 onMouseDown: this.onMouseDown,
                 onMouseUp: this.onMouseUp,
