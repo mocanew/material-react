@@ -13,9 +13,11 @@ class Button extends React.Component {
         raised: PropTypes.bool,
         flat: PropTypes.bool,
         ripple: PropTypes.bool,
-        disabled: PropTypes.bool
+        disabled: PropTypes.bool,
+        wrapperElem: PropTypes.node
     }
     static defaultProps = {
+        wrapperElem: 'div',
         ripple: true,
         flat: false,
         raised: false,
@@ -144,9 +146,10 @@ class Button extends React.Component {
         else {
             eventListeners = {};
         }
+        var Elem = this.props.wrapperElem;
 
         return (
-            <div
+            <Elem
                 style={this.props.style}
                 className={classes}
                 {...eventListeners}
@@ -171,7 +174,7 @@ class Button extends React.Component {
                             <span className="s3"></span>
                         </span> : ''
                 }
-            </div>
+            </Elem>
         );
     }
 }
