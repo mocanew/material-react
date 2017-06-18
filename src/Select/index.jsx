@@ -63,6 +63,19 @@ class Select extends React.Component {
         this.clickLi = this.clickLi.bind(this);
         this.clickBody = this.clickBody.bind(this);
     }
+    static cumulativeOffset(element) {
+        var top = 0, left = 0;
+        do {
+            top += element.offsetTop || 0;
+            left += element.offsetLeft || 0;
+            element = element.offsetParent;
+        } while (element);
+
+        return {
+            top: top,
+            left: left
+        };
+    }
     parseOptions(options, state) {
         _.each(options, (value, key) => {
             if (!_.isObject(value)) {
@@ -196,11 +209,31 @@ class Select extends React.Component {
         });
         var optionsNumber = this.state.options.length - (this.state.placeholder && this.state.required ? 1 : 0);
         var height = !this.state.open ? this.state.height : Math.min(optionsNumber * this.state.height, 5 * this.state.height);
-        var selectStyle = {
-            transform: this.state.open ? `translate(0, calc(${this.state.height / 2}px - 50%))` : false,
-            overflow: this.state.open ? 'auto' : false,
-            height: height
-        };
+
+        var selectStyle = {};
+
+        if (this.state.open) {
+            var padding = 5;
+            var offset = Select.cumulativeOffset(this.wrapper);
+            var currentY = offset.top - window.scrollY; // relative to scrolled window
+
+            var transformY = (this.state.height - height) / 2;
+
+            if (height > window.innerHeight) {
+                height = window.innerHeight - padding * 2;
+            }
+
+            if (transformY + currentY < padding) {
+                transformY = -currentY + padding;
+            }
+            else if (currentY + transformY + height > window.innerHeight - padding) {
+                transformY = -currentY - height + (window.innerHeight - padding);
+            }
+
+            selectStyle.transform = `translate(0, ${transformY}px)`;
+            selectStyle.overflow = 'auto';
+        }
+        selectStyle.height = height;
 
         var content;
         if (this.state.onTop) {

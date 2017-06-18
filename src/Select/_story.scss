@@ -1,0 +1,33 @@
+$selectWidth: 300px;
+$selectHeight: 48px;
+
+.selectPositionsWrapper {
+    position: relative;
+    height: 100%;
+    margin-top: 300px;
+    margin-bottom: 300px;
+}
+.selectPositions {
+    position: absolute;
+
+    &.top {
+        top: 0;
+    }
+    &.middle {
+        top: 50%;
+        margin-top: - $selectHeight / 2;
+    }
+    &.bottom {
+        bottom: 1px;
+    }
+    &.left {
+        left: 0;
+    }
+    &.center {
+        left: 50%;
+        margin-left: - $selectWidth / 2;
+    }
+    &.right {
+        right: 2px;
+    }
+}
