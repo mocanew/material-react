@@ -89,3 +89,24 @@ stories.add('Unmount cleanup test', () => <StressTest interval={number('Frequenc
     max: 10000,
     step: 1
 })} />);
+
+stories.add('Many buttons', () => {
+    var list = [];
+    for (var i = 0; i < 100; i++) {
+        if (i % 2 == 0) {
+            list.push(
+                <Button flat key={i * 3}>Flat button</Button>
+            );
+            list.push(<br key={i * 3 + 1} />);
+            list.push(<br key={i * 3 + 2} />);
+        }
+        else {
+            list.push(
+                <Button raised key={i * 3}>Raised button</Button>
+            );
+            list.push(<br key={i * 3 + 1} />);
+            list.push(<br key={i * 3 + 2} />);
+        }
+    }
+    return <div>{list}</div>;
+});
