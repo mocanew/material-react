@@ -20,6 +20,18 @@ function getParents(el, parentSelector) {
 }
 
 class Select extends React.Component {
+    static propTypes = {
+        className: PropTypes.string,
+        options: PropTypes.array,
+        height: PropTypes.number,
+        animation: PropTypes.bool,
+        inline: PropTypes.bool,
+        open: PropTypes.bool,
+        required: PropTypes.bool,
+        message: PropTypes.string,
+        onChange: PropTypes.func,
+        validator: PropTypes.func
+    }
     constructor(props) {
         super(props);
         var defaults = {
@@ -103,7 +115,7 @@ class Select extends React.Component {
         this.setState({
             open: false
         });
-        smoothscroll(0, this.state.animationDuration, null, this.refs.select);
+        smoothscroll(0, this.state.animationDuration, null, this.select);
 
         this.setState({
             error: this.validator(this.state.selected.text) || (this.state.required && this.state.selected == this.state.placeholder)
@@ -121,7 +133,7 @@ class Select extends React.Component {
 
         var pos = Math.max((this.state.options.indexOf(this.state.selected) - 2) * this.state.height, 0);
 
-        smoothscroll(pos, this.state.animationDuration, null, this.refs.select);
+        smoothscroll(pos, this.state.animationDuration, null, this.select);
     }
     clickLi(e) {
         if (!e.target || !e.target.attributes['data-id']) return;
@@ -148,16 +160,16 @@ class Select extends React.Component {
             var last = parents[parents.length - 1];
             if (last && last.className.indexOf('materialSelect') != -1) target = last;
         }
-        if (target == this.refs.wrapper) this.open();
+        if (target == this.wrapper) this.open();
         else this.close();
     }
     componentDidMount() {
         document.body.addEventListener('click', this.clickBody);
-        this.refs.wrapper.addEventListener('click', this.clickLi);
+        this.wrapper.addEventListener('click', this.clickLi);
     }
     componentWillUnmount() {
         document.body.removeEventListener('click', this.clickBody);
-        this.refs.wrapper.removeEventListener('click', this.clickLi);
+        this.wrapper.removeEventListener('click', this.clickLi);
     }
     componentWillReceiveProps(newProps) {
         if (newProps.options) {
@@ -167,7 +179,7 @@ class Select extends React.Component {
         }
     }
     render() {
-        var wrapperClasses = classnames({
+        var wrapperClasses = classnames(this.props.className, {
             materialSelect: true,
             inline: this.state.inline,
             error: this.state.error,
@@ -205,8 +217,14 @@ class Select extends React.Component {
         }
 
         return (
-            <div className={wrapperClasses} style={wrapperStyle} ref="wrapper">
-                <ul className={selectClasses} style={selectStyle} ref="select">
+            <div
+                className={wrapperClasses}
+                style={wrapperStyle}
+                ref={wrapper => this.wrapper = wrapper}>
+                <ul
+                    className={selectClasses}
+                    style={selectStyle}
+                    ref={select => this.select = select}>
                     {
                         content
                     }
@@ -216,29 +234,5 @@ class Select extends React.Component {
         );
     }
 }
-
-Select.propTypes = {
-    options: PropTypes.array,
-    height: PropTypes.number,
-    animation: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.string
-    ]),
-    inline: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.string
-    ]),
-    open: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.string
-    ]),
-    required: PropTypes.oneOfType([
-        PropTypes.bool,
-        PropTypes.string
-    ]),
-    message: PropTypes.string,
-    onChange: PropTypes.func,
-    validator: PropTypes.func
-};
 
 export default Select;
