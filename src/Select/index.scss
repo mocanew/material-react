@@ -28,7 +28,7 @@ $transitionDuration: 0.2s;
             transition: background $transitionDuration ease, border $transitionDuration linear, transform $transitionDuration linear, height $transitionDuration linear, box-shadow $transitionDuration ease;
 
             li {
-                transition: height $transitionDuration linear, opacity $transitionDuration ease, margin $transitionDuration linear;
+                transition: background 0.3s, height $transitionDuration linear, opacity $transitionDuration ease, margin $transitionDuration linear;
             }
         }
     }
@@ -62,6 +62,7 @@ $transitionDuration: 0.2s;
             width: 0px;
         }
         li {
+            display: block;
             cursor: pointer;
             font-size: 15px;
             list-style: none;

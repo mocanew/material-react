@@ -5,6 +5,8 @@ import smoothscroll from 'smoothscroll';
 import classnames from 'classnames';
 import './index.scss';
 
+import Button from '../Button/';
+
 function getParents(el, parentSelector) {
     var parents = [];
     var p = el.parentElement;
@@ -78,7 +80,6 @@ class Select extends React.Component {
         this.parseOptions = this.parseOptions.bind(this);
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
-        this.clickLi = this.clickLi.bind(this);
         this.clickBody = this.clickBody.bind(this);
     }
     parseOptions(options, state) {
@@ -121,6 +122,7 @@ class Select extends React.Component {
         if (!this.state.open) {
             return;
         }
+
         this.timeout = setTimeout(() => {
             this.setState({
                 onTop: false
@@ -149,23 +151,19 @@ class Select extends React.Component {
 
         smoothscroll(pos, this.state.animationDuration, null, this.select);
     }
-    clickLi(e) {
-        if (!e.target || !e.target.attributes['data-id']) return;
-        var id = e.target.attributes['data-id'].value;
+    clickLi(id) {
+        if (!this.state.open) {
+            return;
+        }
+
         var selected = this.state.options[id];
         this.setState({
-            value: this.state.options[id].text
+            value: selected.text,
+            selected: selected
         });
 
-        if (this.state.open) {
-            this.setState({
-                selected: selected
-            });
-
-            this.props.onChange(this.state.selected.text, this.state.selected);
-            this.close();
-            e.stopPropagation();
-        }
+        this.props.onChange(this.state.selected.text, this.state.selected);
+        this.close();
     }
     clickBody(e) {
         var target = e.target;
@@ -174,16 +172,18 @@ class Select extends React.Component {
             var last = parents[parents.length - 1];
             if (last && last.className.indexOf('materialSelect') != -1) target = last;
         }
-        if (target == this.wrapper) this.open();
-        else this.close();
+
+        if (target != this.wrapper && this.state.open) {
+            this.close();
+        }
     }
     componentDidMount() {
-        window.addEventListener('click', this.clickBody);
-        this.wrapper.addEventListener('click', this.clickLi);
+        window.addEventListener('mouseup', this.clickBody);
+        window.addEventListener('touchend', this.clickBody);
     }
     componentWillUnmount() {
-        window.removeEventListener('click', this.clickBody);
-        this.wrapper.removeEventListener('click', this.clickLi);
+        window.removeEventListener('mouseup', this.clickBody);
+        window.removeEventListener('touchend', this.clickBody);
     }
     componentWillReceiveProps(newProps) {
         if (newProps.options) {
@@ -240,21 +240,40 @@ class Select extends React.Component {
         if (this.state.onTop) {
             content = this.state.options.map((option, key) => {
                 if (option.placeholder && this.state.required) {
-                    return '';
+                    return null;
                 }
 
-                return <li className={this.state.selected.key == key ? 'selected' : ''} data-id={key} key={key}>{option.text}</li>;
+                return (
+                    <Button
+                        flat
+                        wrapperElem='li'
+                        onClick={this.clickLi.bind(this, key)}
+                        className={this.state.selected.key == key ? 'selected' : ''}
+                        key={key}>
+                        {option.text}
+                    </Button>
+                );
             });
         }
         else if (this.state.selected) {
-            content = <li className="selected" data-id={this.state.selected.key}>{this.state.selected.text}</li>;
+            content = (
+                <Button
+                    flat
+                    wrapperElem='li'
+                    className="selected"
+                    key={this.state.selected.key}>
+                    {this.state.selected.text}
+                </Button>
+            );
         }
 
         return (
-            <div
+            <Button
+                ripple={false}
                 className={wrapperClasses}
                 style={wrapperStyle}
-                ref={wrapper => this.wrapper = wrapper}>
+                onClick={this.open}
+                ref={wrapper => this.wrapper = wrapper && wrapper.button}>
                 <ul
                     className={selectClasses}
                     style={selectStyle}
@@ -264,7 +283,7 @@ class Select extends React.Component {
                     }
                 </ul>
                 <div className="message">{this.state.message}</div>
-            </div>
+            </Button>
         );
     }
 }
