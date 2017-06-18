@@ -177,11 +177,11 @@ class Select extends React.Component {
         else this.close();
     }
     componentDidMount() {
-        document.body.addEventListener('click', this.clickBody);
+        window.addEventListener('click', this.clickBody);
         this.wrapper.addEventListener('click', this.clickLi);
     }
     componentWillUnmount() {
-        document.body.removeEventListener('click', this.clickBody);
+        window.removeEventListener('click', this.clickBody);
         this.wrapper.removeEventListener('click', this.clickLi);
     }
     componentWillReceiveProps(newProps) {
