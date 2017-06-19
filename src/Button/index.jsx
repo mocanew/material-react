@@ -35,7 +35,6 @@ class Button extends React.Component {
         this.state = {
             ripples: []
         };
-        this.touch = false;
         this.touches = [];
 
         var functionsToBind = [
@@ -51,10 +50,6 @@ class Button extends React.Component {
         });
     }
     onMouseDown(e) {
-        if (this.touch) {
-            return;
-        }
-
         if (this.props.ripple) {
             this.rippleController.onCursorDown({
                 x: e.pageX,
@@ -65,20 +60,12 @@ class Button extends React.Component {
         }
     }
     onMouseUp(e) {
-        if (this.touch) {
-            return;
-        }
-
         if (this.props.ripple) {
             this.rippleController.onCursorUp();
         }
         this.props.onClick(e);
     }
     onMouseCancel() {
-        if (this.touch) {
-            return;
-        }
-
         if (this.props.ripple) {
             this.rippleController.onCursorUp({
                 cancel: true
@@ -86,7 +73,6 @@ class Button extends React.Component {
         }
     }
     onTouchStart(e) {
-        this.touch = true;
         if (!e || !e.targetTouches || !e.targetTouches.length) {
             return;
         }
@@ -121,6 +107,7 @@ class Button extends React.Component {
         this.touches = touches;
     }
     onTouchEnd(e) {
+        e.preventDefault();
         var touches = Button.getTouchIDs(e.targetTouches);
 
         for (var i = 0; i < this.touches.length; i++) {
