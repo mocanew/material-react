@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import smoothscroll from 'smoothscroll';
 import classnames from 'classnames';
 import './index.scss';
@@ -11,18 +10,26 @@ class Select extends React.Component {
     static propTypes = {
         className: PropTypes.string,
         options: PropTypes.array,
+        value: PropTypes.string,
+        width: PropTypes.number,
         height: PropTypes.number,
-        animation: PropTypes.bool,
         inline: PropTypes.bool,
-        open: PropTypes.bool,
         required: PropTypes.bool,
         message: PropTypes.string,
         onChange: PropTypes.func,
-        validator: PropTypes.func
+        validator: PropTypes.func,
+        animation: PropTypes.bool,
+        animationDuration: PropTypes.number
     }
     static defaultProps = {
         onChange: () => { },
-        validator: Select.defaultValidator
+        validator: Select.defaultValidator,
+        width: 150,
+        height: 48,
+        inline: false,
+        required: false,
+        animation: true,
+        animationDuration: 300
     }
     static cumulativeOffset(element) {
         var top = 0, left = 0;
@@ -43,24 +50,21 @@ class Select extends React.Component {
     }
     constructor(props) {
         super(props);
-        var defaults = {
+        var state = {
             options: [],
-            width: 150,
-            height: 48,
             value: '',
             message: 'Please select something',
             selected: null,
-            animation: true,
-            animationDuration: 300,
             empty: true,
-            inline: false,
             error: false,
-            open: false,
-            required: false
+            open: false
         };
-        var state = _.merge(defaults, _.pick(props, Object.keys(defaults)));
 
-        this.parseOptions(state.options, state);
+        Object.keys(state).forEach(key => {
+            if (props[key] !== undefined) {
+                state[key] = props[key];
+            }
+        });
         this.state = state;
 
         this.parseOptions = this.parseOptions.bind(this);
@@ -68,40 +72,31 @@ class Select extends React.Component {
         this.open = this.open.bind(this);
         this.clickBody = this.clickBody.bind(this);
     }
-    parseOptions(options, state) {
-        _.each(options, (value, key) => {
-            if (!_.isObject(value)) {
+    parseOptions(options) {
+        var tempState = {};
+        options.forEach((value, i) => {
+            if (typeof value != 'object') {
                 value = {
                     text: value
                 };
+                options[i] = value;
             }
-            var selected = this.state ? !this.state.selected : !state.selected;
-            if (selected && value.placeholder) {
-                if (state) {
-                    state.selected = value;
-                    state.placeholder = value;
-                }
-                else {
-                    this.setState({
-                        placeholder: value,
-                        selected: value
-                    });
-                }
-            }
-            if (value.selected) {
-                if (state) {
-                    state.selected = value;
-                }
-                else {
-                    this.setState({
-                        selected: value
-                    });
-                }
-            }
-            value.key = key;
 
-            options[key] = value;
+            if (!tempState.selected && value.placeholder) {
+                tempState.selected = value;
+                tempState.placeholder = value;
+            }
+
+            if (value.selected) {
+                tempState.selected = value;
+            }
+
+            if (value.key === undefined) {
+                value.key = i;
+            }
         });
+        tempState.options = options;
+        this.setState(tempState);
         return options;
     }
     close() {
@@ -113,11 +108,11 @@ class Select extends React.Component {
             this.setState({
                 onTop: false
             });
-        }, this.state.animationDuration);
+        }, this.props.animationDuration);
         this.setState({
             open: false
         });
-        smoothscroll(0, this.state.animationDuration, null, this.select);
+        smoothscroll(0, this.props.animationDuration, null, this.select);
 
         this.setState({
             error: this.props.validator(this.state.selected.text) || (this.state.required && this.state.selected == this.state.placeholder)
@@ -133,9 +128,9 @@ class Select extends React.Component {
             onTop: true
         });
 
-        var pos = Math.max((this.state.options.indexOf(this.state.selected) - 2) * this.state.height, 0);
+        var pos = Math.max((this.state.options.indexOf(this.state.selected) - 2) * this.props.height, 0);
 
-        smoothscroll(pos, this.state.animationDuration, null, this.select);
+        smoothscroll(pos, this.props.animationDuration, null, this.select);
     }
     clickLi(id) {
         if (!this.state.open) {
@@ -174,39 +169,43 @@ class Select extends React.Component {
             this.close();
         }
     }
+    componentWillMount() {
+        this.parseOptions(this.state.options);
+    }
     componentDidMount() {
         window.addEventListener('mouseup', this.clickBody);
         window.addEventListener('touchend', this.clickBody);
     }
     componentWillUnmount() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
         window.removeEventListener('mouseup', this.clickBody);
         window.removeEventListener('touchend', this.clickBody);
     }
     componentWillReceiveProps(newProps) {
         if (newProps.options) {
-            this.setState({
-                options: this.parseOptions(newProps.options)
-            });
+            this.parseOptions(newProps.options);
         }
     }
     render() {
         var wrapperClasses = classnames(this.props.className, {
             materialSelect: true,
-            inline: this.state.inline,
+            inline: this.props.inline,
             error: this.state.error,
             empty: this.state.empty,
-            animate: this.state.animation
+            animate: this.props.animation
         });
         var wrapperStyle = {
-            width: this.state.inline ? this.state.width : false
+            width: this.props.inline ? this.props.width : false
         };
         var selectClasses = classnames({
             select: true,
             open: this.state.open,
             onTop: this.state.onTop
         });
-        var optionsNumber = this.state.options.length - (this.state.placeholder && this.state.required ? 1 : 0);
-        var height = !this.state.open ? this.state.height : Math.min(optionsNumber * this.state.height, 5 * this.state.height);
+        var optionsNumber = this.state.options.length - (this.state.placeholder && this.props.required ? 1 : 0);
+        var height = !this.state.open ? this.props.height : Math.min(optionsNumber * this.props.height, 5 * this.props.height);
 
         var selectStyle = {};
 
@@ -215,7 +214,7 @@ class Select extends React.Component {
             var offset = Select.cumulativeOffset(this.wrapper);
             var currentY = offset.top - window.scrollY; // relative to scrolled window
 
-            var transformY = (this.state.height - height) / 2;
+            var transformY = (this.props.height - height) / 2;
 
             if (height > window.innerHeight) {
                 height = window.innerHeight - padding * 2;
@@ -236,16 +235,17 @@ class Select extends React.Component {
         var content;
         if (this.state.onTop) {
             content = this.state.options.map((option, key) => {
-                if (option.placeholder && this.state.required) {
-                    return null;
-                }
+                var classes = classnames({
+                    selected: this.state.selected.key == key,
+                    hidden: option.placeholder && this.props.required
+                });
 
                 return (
                     <Button
                         flat
                         wrapperElem='li'
                         onClick={this.clickLi.bind(this, key)}
-                        className={this.state.selected.key == key ? 'selected' : ''}
+                        className={classes}
                         key={key}>
                         {option.text}
                     </Button>

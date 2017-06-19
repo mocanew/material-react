@@ -72,6 +72,9 @@ $transitionDuration: 0.2s;
             overflow: hidden;
             user-select: none;
 
+            &.hidden {
+                display: none;
+            }
             &.selected {
                 height: 48px;
             }
