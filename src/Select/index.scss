@@ -93,7 +93,6 @@ $transitionDuration: 0.2s;
             box-shadow: 2px 2px 5px 0 rgba($black, 0.3);
             padding-bottom: 0;
             height: 240px;
-            // transform: translate(0, -50%);
 
             &:after {
                 display: none;
@@ -109,10 +108,16 @@ $transitionDuration: 0.2s;
                     color: $accent-500;
                 }
                 &:hover {
-                    background-color: $grey-300;
+                    background-color: transparent;
                 }
                 &:active {
                     background-color: $grey-400;
+                }
+
+                @media (pointer: fine) {
+                    &:hover {
+                        background-color: $grey-300;
+                    }
                 }
             }
         }
