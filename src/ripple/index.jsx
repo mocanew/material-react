@@ -134,6 +134,7 @@ class RippleController extends React.PureComponent {
         });
         var touchID = options.touchID || 0;
         this.touches[touchID] = ripple;
+        return ripple;
     }
     endRipple(touchID, cancel) {
         touchID = touchID || 0;
@@ -149,6 +150,7 @@ class RippleController extends React.PureComponent {
             ripple.canceled = cancel;
             this.renderRipple(ripple);
             this.endRippleAnimation(ripple);
+            return ripple;
         }
     }
     renderRipple(ripple) {
@@ -207,11 +209,11 @@ class RippleController extends React.PureComponent {
         }
     }
     onCursorDown(options) {
-        this.startRippleAt(options);
+        return this.startRippleAt(options);
     }
     onCursorUp(options) {
         options = options || {};
-        this.endRipple(options.touchID, options.cancel);
+        return this.endRipple(options.touchID, options.cancel);
     }
     render() {
         return (
