@@ -17,7 +17,7 @@
     "start": "start-storybook -p 9001",
     "build-storybook": "build-storybook",
     "scss": "copyfiles -u 1 src/**/*.scss dist/ && copyfiles -u 1 src/_variables.scss dist/",
-    "lint": "eslint src/**/*.js src/**/*.jsx",
+    "lint": "eslint src/**/*.js src/**/*.jsx || echo; stylelint src/**/*.scss || echo",
     "babel": "babel ./src --out-dir ./dist",
     "build": "cross-env NODE_ENV=production npm run babel && npm run scss",
     "clean": "rimraf ./dist",

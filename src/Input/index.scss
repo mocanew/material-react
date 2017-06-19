@@ -7,7 +7,6 @@
     outline: 0;
     opacity: 1;
 }
-
 .materialInput {
     position: relative;
     margin: 20px 0 35px;
@@ -31,8 +30,8 @@
                 @extend %label;
             }
             ~ .bar {
-                &:before,
-                &:after {
+                &::before,
+                &::after {
                     width: 50%;
                 }
             }
@@ -53,14 +52,11 @@
             resize: vertical;
         }
     }
-
     &:not(.empty) {
-        .input  ~ label {
+        .input ~ label {
             @extend %label;
         }
     }
-
-
     label {
         position: absolute;
         top: 10px;
@@ -72,14 +68,13 @@
         opacity: 0.38;
         transition: 0.2s opacity, 0.2s top, color 0.2s, font-size 0.2s;
     }
-
     .bar {
         position: relative;
         display: block;
         width: 100%;
 
-        &:before,
-        &:after {
+        &::before,
+        &::after {
             position: absolute;
             bottom: 1px;
             width: 0;
@@ -88,14 +83,13 @@
             content: '';
             transition: width 0.5s, color 0.2s;
         }
-        &:before {
+        &::before {
             left: 50%;
         }
-        &:after {
+        &::after {
             right: 50%;
         }
     }
-
     .highlight {
         position: absolute;
         top: 25%;
@@ -105,7 +99,6 @@
         pointer-events: none;
         opacity: 0.5;
     }
-
     .message {
         margin-top: 5px;
         font-size: 14px;
@@ -114,13 +107,12 @@
         opacity: 0;
         transition: opacity 0.2s, color 0.2s;
     }
-
     &.error {
         margin-bottom: 45px;
 
         .bar {
-            &:after,
-            &:before {
+            &::after,
+            &::before {
                 width: 50%;
                 background: $red-500;
             }

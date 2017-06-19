@@ -46,6 +46,7 @@
     }
     &.flat {
         @extend %button;
+
         padding: 10px 16px;
         box-shadow: none;
         transition: background 0.3s;
@@ -60,6 +61,7 @@
         }
     }
     $spanSize: 30px;
+
     &.iconBtn {
         overflow: hidden;
         transform: translateZ(0);
@@ -100,6 +102,7 @@
     }
     &.pause .icon > span {
         transform: scale(0.4, 1) translate($spanSize / 20 * 16 * -1, 0);
+
         &.s3 {
             transform: scale(0.4, 1) translate($spanSize / 20 * 16, 0);
         }
@@ -109,6 +112,7 @@
     }
     &.menu .icon > span {
         transform: scale(1, 0.1) translate(0, $spanSize * -3);
+
         &.s2 {
             transform: scale(1, 0.1) translate(0, 0);
         }
@@ -122,6 +126,7 @@
     &.close .icon > span,
     &.plus .icon > span {
         transform: scale(1, 0.1) translate(0, 0);
+
         &.s3 {
             transform: scale(0.1, 1);
         }
@@ -132,6 +137,7 @@
     &.more .icon > span {
         border-radius: $spanSize;
         transform: scale(0.2, 0.2) translate($spanSize * 3 / -2, 0);
+
         &.s2 {
             transform: scale(0.2, 0.2) translate(0, 0);
         }
@@ -143,6 +149,7 @@
         width: 0.4em;
         height: 1.8em;
         transform: translate($spanSize / 20 * 8, $spanSize / 10);
+
         &.s2 {
             height: $spanSize / 20 * 14;
             transform: translate($spanSize / 2, 0) rotate(45deg);
@@ -158,6 +165,7 @@
         width: 0.4em;
         height: 1.8em;
         transform: translate($spanSize / 20 * 8, 0);
+
         &.s2 {
             height: $spanSize / 20 * 14;
             transform: translate($spanSize / 20 * 6, $spanSize / 20 * 6) rotate(45deg);
@@ -173,6 +181,7 @@
         width: $spanSize / 20 * 18;
         height: $spanSize / 20 * 4;
         transform: translate(0, $spanSize / 20 * 8);
+
         &.s2 {
             width: $spanSize / 20 * 14;
             transform: translate($spanSize / 20 * 6, $spanSize / 2) rotate(45deg);
@@ -188,6 +197,7 @@
         width: $spanSize / 20 * 18;
         height: $spanSize / 20 * 4;
         transform: translate($spanSize / 10, $spanSize / 20 * 8);
+
         &.s2 {
             width: $spanSize / 20 * 14;
             transform: translate(0, $spanSize / 20 * 6) rotate(45deg);
@@ -204,6 +214,7 @@
         height: $spanSize / 20 * 4;
         transform: translate($spanSize / 20 * -3, $spanSize / 20 * 14) rotate(45deg);
         transform-origin: 100% 100%;
+
         &.s3 {
             width: $spanSize / 20 * 18;
             transform: translate($spanSize / 20 * 7, $spanSize / 20 * 14) rotate(-45deg);
@@ -218,6 +229,7 @@
         border-radius: $spanSize / 2 $spanSize / 2 0 0;
         transform: rotate(-45deg);
         transform-origin: 0 100%;
+
         &.s3 {
             left: 0;
             transform: rotate(45deg);

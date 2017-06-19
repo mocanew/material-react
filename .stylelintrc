@@ -6,8 +6,7 @@
     "rules": {
         "order/order": [
             "declarations",
-            "rules",
-            "at-rules"
+            "rules"
         ],
         "rule-empty-line-before": [
             "always",
