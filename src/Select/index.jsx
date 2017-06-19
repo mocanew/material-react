@@ -7,20 +7,6 @@ import './index.scss';
 
 import Button from '../Button/';
 
-function getParents(el, parentSelector) {
-    var parents = [];
-    var p = el.parentElement;
-
-    while (p && (!parentSelector || p.parentElement.querySelector(parentSelector) == null)) {
-        var o = p;
-        parents.push(o);
-        p = o.parentElement;
-    }
-    if (p) parents.push(p);
-
-    return parents;
-}
-
 class Select extends React.Component {
     static propTypes = {
         className: PropTypes.string,
@@ -166,14 +152,25 @@ class Select extends React.Component {
         this.close();
     }
     clickBody(e) {
-        var target = e.target;
-        if (e.target.className.indexOf('materialSelect') == -1) {
-            var parents = getParents(e.target, '.materialSelect');
-            var last = parents[parents.length - 1];
-            if (last && last.className.indexOf('materialSelect') != -1) target = last;
+        if (!this.state.open) {
+            return;
         }
 
-        if (target != this.wrapper && this.state.open) {
+        var target = e.target;
+        if (target.className.indexOf('materialSelect') == -1) {
+            var lastParent = target.parentElement;
+
+            while (lastParent) {
+                if (lastParent.className.indexOf('materialSelect') != -1) {
+                    target = lastParent;
+                    break;
+                }
+
+                lastParent = lastParent.parentElement;
+            }
+        }
+
+        if (target != this.wrapper) {
             this.close();
         }
     }
