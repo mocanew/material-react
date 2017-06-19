@@ -143,7 +143,7 @@ class Select extends React.Component {
             selected: selected
         });
 
-        this.props.onChange(this.state.selected.text, this.state.selected);
+        this.props.onChange(selected.text, selected);
         this.close();
     }
     clickBody(e) {
