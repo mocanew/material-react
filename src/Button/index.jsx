@@ -50,6 +50,10 @@ class Button extends React.Component {
         });
     }
     onMouseDown(e) {
+        if (window.materialButtonTouch) {
+            return;
+        }
+
         if (this.props.ripple) {
             this.rippleController.onCursorDown({
                 x: e.pageX,
@@ -60,12 +64,20 @@ class Button extends React.Component {
         }
     }
     onMouseUp(e) {
+        if (window.materialButtonTouch) {
+            return;
+        }
+
         if (this.props.ripple) {
             this.rippleController.onCursorUp();
         }
         this.props.onClick(e);
     }
     onMouseCancel() {
+        if (window.materialButtonTouch) {
+            return;
+        }
+
         if (this.props.ripple) {
             this.rippleController.onCursorUp({
                 cancel: true
@@ -107,7 +119,13 @@ class Button extends React.Component {
         this.touches = touches;
     }
     onTouchEnd(e) {
-        e.preventDefault();
+        if (window.materialButtonClickTimeout) {
+            clearTimeout(window.materialButtonClickTimeout);
+        }
+        window.materialButtonTouch = true;
+        window.materialButtonClickTimeout = setTimeout(() => {
+            window.materialButtonTouch = false;
+        }, 1000);
         var touches = Button.getTouchIDs(e.targetTouches);
 
         for (var i = 0; i < this.touches.length; i++) {
