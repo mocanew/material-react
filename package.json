@@ -22,6 +22,8 @@
     "build": "cross-env NODE_ENV=production npm run babel && npm run scss",
     "clean": "rimraf ./dist",
     "prebuild": "npm run clean",
+    "publishDev": "npm publish --tag=dev",
+    "publishStable": "npm publish --tag=latest",
     "prepublishOnly": "npm run build"
   },
   "author": "Valentin Mocanu <mr_vali@yahoo.ro> (http://rontavstudio.com)",
