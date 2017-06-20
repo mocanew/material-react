@@ -1,47 +1,73 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './index.scss';
 import classNames from 'classnames';
-import _ from 'lodash';
+import './index.scss';
 
 class Input extends React.Component {
+    static propTypes = {
+        multiline: PropTypes.bool,
+        required: PropTypes.bool,
+
+        autocomplete: PropTypes.bool,
+        autofocus: PropTypes.bool,
+        disabled: PropTypes.bool,
+        readonly: PropTypes.bool,
+        autocorrect: PropTypes.bool,
+
+        name: PropTypes.string,
+        title: PropTypes.string,
+        type: PropTypes.string,
+        value: PropTypes.string,
+        placeholder: PropTypes.string,
+
+        inputmode: PropTypes.string,
+        pattern: PropTypes.string,
+        tabIndex: PropTypes.string,
+        maxlengt: PropTypes.string,
+
+        message: PropTypes.string,
+
+        className: PropTypes.string,
+        style: PropTypes.object,
+        validator: PropTypes.func,
+        inputRef: PropTypes.func,
+        onInput: PropTypes.func,
+        onChange: PropTypes.func,
+        onBlur: PropTypes.func,
+        onFocus: PropTypes.func,
+    }
+    static defaultProps = {
+        required: false,
+        message: 'This field is required',
+        inputRef: () => { },
+        onInput: () => { },
+        onChange: () => { },
+        onBlur: () => { },
+        onFocus: () => { },
+        validator: Input.defaultValidator
+    }
+    static defaultValidator(inputValue, options) {
+        if (typeof inputValue != 'string') {
+            return;
+        }
+
+        return {
+            empty: inputValue.length == 0,
+            error: options.required && inputValue.trim().length == 0 ? true : false
+        };
+    }
     constructor(props) {
         super(props);
-        var defaults = {
+        this.state = {
             error: false,
             empty: true,
-            name: '',
-            title: '',
-            type: 'text',
-            required: false,
-            message: '',
-            multiline: false,
             value: ''
         };
-        var state = _.merge({}, defaults, _.pick(props, Object.keys(defaults)));
-        state.name = props.name ? props.name : props.children;
-        state.title = props.title ? props.title : props.children;
-        state.empty = state.value.length <= 0;
-        this.state = state;
+
         this.validate = this.validate.bind(this);
-        this.validator = _.isFunction(props.validator) ? props.validator : Input.defaultValidator;
         this.onInput = this.onInput.bind(this);
         this.onBlur = this.onBlur.bind(this);
-    }
-    static get defaultProps() {
-        return {
-            name: '',
-            title: '',
-            required: false,
-            message: 'This field is required'
-        };
-    }
-    static defaultValidator(e, options) {
-        var empty = (e && e.trim && e.trim().length > 0) ? false : true;
-        return {
-            empty: empty,
-            error: options && options.required && empty ? true : false
-        };
+        this.parseProps = this.parseProps.bind(this);
     }
     highlightError() {
         if (!this.state.error) return;
@@ -52,97 +78,141 @@ class Input extends React.Component {
             error: true
         }), 500);
     }
-    onBlur(e) {
-        if (_.isFunction(this.props.onBlur)) this.props.onBlur(e);
+    onInput(e) {
+        console.log('input', e.type);
+        var input = e.target.value;
+
+        this.props.onInput(input);
+
+        var newState = {
+            value: input
+        };
+        if (this.state.empty && input.length) {
+            newState.empty = false;
+        }
+
+        this.setState(newState);
     }
-    onInput() {
-        var input = this.refs.input.value;
+    onBlur() {
+        var input = this.state.value;
+        input = this.validate(input);
 
-        if (_.isFunction(this.props.onInput)) this.props.onInput(input);
-        if (_.isFunction(this.props.onChange) && this.state.value.trim() != input.trim()) this.props.onChange(input.trim());
-
-        this.validate(input);
+        if (this.lastInput != input) {
+            this.props.onChange(input);
+            this.lastInput = input;
+        }
+        this.props.onBlur();
     }
     validate(input) {
-        var validator = this.validator(input, {
-            required: this.state.required
+        var validatorResponse = this.props.validator(input, {
+            required: this.props.required
         });
-        if (!_.isString(validator.message)) {
-            validator.message = this.state.message;
+        if (!validatorResponse) {
+            this.setState({
+                error: true
+            });
+            return;
         }
-        if (_.isString(validator.value)) {
-            input = validator.value;
+
+        if (!validatorResponse.message) {
+            validatorResponse.message = this.props.message;
         }
-        // if (this.state.multiline) {
-        //     this.refs.input.style.height = 0;
-        //     var computedStyle = window.getComputedStyle(this.refs.input);
-        //     this.refs.input.style.height = (this.refs.input.scrollHeight - parseInt(computedStyle.paddingTop) - parseInt(computedStyle.paddingBottom)) + 'px';
-        // }
+        if (validatorResponse.value) {
+            input = validatorResponse.value;
+        }
         this.setState({
-            empty: validator.empty,
-            error: validator.error,
-            message: validator.message,
+            empty: validatorResponse.empty,
+            error: validatorResponse.error,
+            message: validatorResponse.message,
             value: input
         });
-        if (_.isFunction(validator.callback)) {
-            setTimeout(validator.callback);
+        if (typeof validatorResponse.callback == 'function') {
+            setTimeout(validatorResponse.callback);
         }
+        return input;
     }
-    clear() {
-        this.setState({
-            empty: true,
-            error: false,
-            value: ''
-        });
+    componentWillMount() {
+        this.parseProps(this.props);
     }
-    // componentDidMount() {
-    //     if (this.state.multiline) {
-    //         this.refs.input.style.height = 0;
-    //     }
-    // }
     componentWillReceiveProps(newProps) {
-        if (_.isString(newProps.value) && newProps.value != this.state.value) {
-            this.validate(newProps.value);
+        this.parseProps(newProps);
+    }
+    parseProps(props) {
+        if (!props) {
+            return;
         }
+
+        var newState = {
+            attributes: {}
+        };
+
+        var attributeNames = [
+            'name',
+            'title',
+            'required',
+            'autocomplete',
+            'autofocus',
+            'disabled',
+            'inputmode',
+            'pattern',
+            'readonly',
+            'autocorrect',
+            'tabIndex',
+            'maxlength'
+        ];
+        for (var i = 0; i < attributeNames.length; i++) {
+            var attr = attributeNames[i];
+            if (props[attr] !== undefined) {
+                newState.attributes[attr] = props[attr];
+            }
+        }
+
+        if (props.value !== undefined) {
+            newState.empty = !props.value.length;
+            newState.value = props.value;
+            this.validate(newState.value);
+        }
+
+        this.setState(newState);
     }
     render() {
-        var parentClasses = classNames({
+        var parentClasses = classNames(this.props.className, {
             materialInput: true,
             error: this.state.error,
             empty: this.state.empty
         });
+
         var field;
-        if (this.state.multiline) {
-            field = <textarea className="input" name={this.state.name} onInput={this.onInput} onBlur={this.onBlur} ref="input" value={this.state.value} />;
+        if (this.props.multiline) {
+            field = <textarea
+                className="input"
+                {...this.state.attributes}
+                onInput={this.onInput}
+                onBlur={this.onBlur}
+                onFocus={this.props.onFocus}
+                value={this.state.value}
+                ref={this.props.inputRef} />;
         }
         else {
-            field = <input className="input" type={this.state.type} name={this.state.name} onInput={this.onInput} onBlur={this.onBlur} ref="input" required={this.state.required} value={this.state.value} />;
+            field = <input
+                className="input"
+                {...this.state.attributes}
+                onInput={this.onInput}
+                onBlur={this.onBlur}
+                onFocus={this.props.onFocus}
+                value={this.state.value}
+                ref={this.props.inputRef} />;
         }
         return (
-            <div className={parentClasses} ref="parent">
+            <div className={parentClasses} style={this.props.style}>
                 {field}
-                <span className="highlight"></span>
-                <span className="bar"></span>
-                <label htmlFor="name">{this.state.title}</label>
+                <span className="highlight" />
+                <span className="bar" />
+                <label>{this.props.placeholder}</label>
                 <div className="message">{this.state.message}</div>
             </div>
         );
     }
 }
-
-Input.propTypes = {
-    multiline: PropTypes.bool,
-    required: PropTypes.bool,
-    name: PropTypes.string,
-    children: PropTypes.string,
-    title: PropTypes.string,
-    message: PropTypes.string,
-    type: PropTypes.string,
-    value: PropTypes.string,
-    onBlur: PropTypes.func,
-    onChange: PropTypes.func,
-    onInput: PropTypes.func,
-    validator: PropTypes.func
-};
 
 export default Input;
