@@ -8,11 +8,11 @@ class Input extends React.Component {
         multiline: PropTypes.bool,
         required: PropTypes.bool,
 
-        autocomplete: PropTypes.bool,
-        autofocus: PropTypes.bool,
+        autoComplete: PropTypes.bool,
+        autoFocus: PropTypes.bool,
         disabled: PropTypes.bool,
-        readonly: PropTypes.bool,
-        autocorrect: PropTypes.bool,
+        readOnly: PropTypes.bool,
+        autoCorrect: PropTypes.bool,
 
         name: PropTypes.string,
         title: PropTypes.string,
@@ -20,10 +20,10 @@ class Input extends React.Component {
         value: PropTypes.string,
         placeholder: PropTypes.string,
 
-        inputmode: PropTypes.string,
+        inputMode: PropTypes.string,
         pattern: PropTypes.string,
         tabIndex: PropTypes.string,
-        maxlengt: PropTypes.string,
+        maxLength: PropTypes.string,
 
         message: PropTypes.string,
 
@@ -79,7 +79,6 @@ class Input extends React.Component {
         }), 500);
     }
     onInput(e) {
-        console.log('input', e.type);
         var input = e.target.value;
 
         this.props.onInput(input);
@@ -150,15 +149,15 @@ class Input extends React.Component {
             'name',
             'title',
             'required',
-            'autocomplete',
-            'autofocus',
+            'autoComplete',
+            'autoFocus',
             'disabled',
-            'inputmode',
+            'inputMode',
             'pattern',
-            'readonly',
-            'autocorrect',
+            'readOnly',
+            'autoCorrect',
             'tabIndex',
-            'maxlength'
+            'maxLength'
         ];
         for (var i = 0; i < attributeNames.length; i++) {
             var attr = attributeNames[i];
