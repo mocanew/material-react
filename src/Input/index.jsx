@@ -22,7 +22,7 @@ class Input extends React.Component {
 
         inputMode: PropTypes.string,
         pattern: PropTypes.string,
-        tabIndex: PropTypes.string,
+        tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         maxLength: PropTypes.string,
 
         message: PropTypes.string,
