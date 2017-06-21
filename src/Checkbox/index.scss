@@ -1,0 +1,64 @@
+@import '../variables';
+
+$checkboxSize: 24px;
+$borderSize: 2px;
+$iconSize: $checkboxSize - $borderSize * 2;
+
+$transitionDuration: 0.3s;
+
+.materialCheckbox {
+    position: relative;
+    display: inline-block;
+    width: $checkboxSize;
+    height: $checkboxSize;
+    padding: $borderSize;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: $borderSize solid $main-500;
+        border-radius: $borderSize;
+        content: '';
+        box-sizing: border-box;
+        transition: border-color $transitionDuration $materialTiming;
+    }
+    .fa {
+        position: absolute;
+        width: $iconSize;
+        height: $iconSize;
+        padding: 0 2px;
+        font-size: $iconSize - 4px;
+        line-height: $iconSize;
+        color: #FFF;
+        background: $main-500;
+        transform: scale(0);
+        box-sizing: border-box;
+        transition: transform $transitionDuration $materialTiming;
+        transform-origin: 50% 50%;
+    }
+    .innerRipple {
+        background: rgba($grey-500, 0.5);
+        transition: background-color $transitionDuration $materialTiming;
+    }
+    .ripple {
+        &.starting {
+            transform: scale(1.5);
+        }
+        &.focus {
+            transform: scale(1.5);
+        }
+    }
+    &.checked {
+        .innerRipple {
+            background: rgba($main-500, 0.5);
+        }
+        .fa {
+            transform: scale(1);
+        }
+    }
+}

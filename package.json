@@ -53,6 +53,7 @@
     "css-loader": "^0.28.4",
     "eslint": "^4.0.0",
     "eslint-plugin-react": "^7.1.0",
+    "font-awesome": "^4.7.0",
     "jsx-loader": "^0.13.2",
     "less": "^2.7.1",
     "less-loader": "^4.0.4",
