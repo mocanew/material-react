@@ -63,6 +63,7 @@ class Input extends React.Component {
             empty: true,
             value: ''
         };
+        this.lastInput = '';
 
         this.validate = this.validate.bind(this);
         this.onInput = this.onInput.bind(this);
@@ -169,6 +170,7 @@ class Input extends React.Component {
         if (props.value !== undefined) {
             newState.empty = !props.value.length;
             newState.value = props.value;
+            this.lastInput = props.value;
             this.validate(newState.value);
         }
 
