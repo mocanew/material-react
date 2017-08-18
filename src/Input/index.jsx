@@ -149,6 +149,7 @@ class Input extends React.Component {
         var attributeNames = [
             'name',
             'title',
+            'type',
             'required',
             'autoComplete',
             'autoFocus',
