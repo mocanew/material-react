@@ -120,12 +120,16 @@ class Input extends React.Component {
         if (validatorResponse.value) {
             input = validatorResponse.value;
         }
-        this.setState({
+        var newState = {
             empty: validatorResponse.empty,
             error: validatorResponse.error,
-            message: validatorResponse.message,
+            message: '',
             value: input
-        });
+        };
+        if ((newState.empty && this.props.required) || newState.error) {
+            newState.message = validatorResponse.message;
+        }
+        this.setState(newState);
         if (typeof validatorResponse.callback == 'function') {
             setTimeout(validatorResponse.callback);
         }
