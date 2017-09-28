@@ -103,9 +103,10 @@ class Input extends React.Component {
         }
         this.props.onBlur();
     }
-    validate(input) {
-        var validatorResponse = this.props.validator(input, {
-            required: this.props.required
+    validate(input, newProps) {
+        var props = newProps ? newProps : this.props;
+        var validatorResponse = props.validator(input, {
+            required: props.required
         });
         if (!validatorResponse) {
             this.setState({
@@ -115,7 +116,7 @@ class Input extends React.Component {
         }
 
         if (!validatorResponse.message) {
-            validatorResponse.message = this.props.message;
+            validatorResponse.message = props.message;
         }
         if (validatorResponse.value) {
             input = validatorResponse.value;
@@ -126,7 +127,7 @@ class Input extends React.Component {
             message: '',
             value: input
         };
-        if ((newState.empty && this.props.required) || newState.error) {
+        if ((newState.empty && props.required) || newState.error) {
             newState.message = validatorResponse.message;
         }
         this.setState(newState);
@@ -176,7 +177,7 @@ class Input extends React.Component {
             newState.empty = !props.value.length;
             newState.value = props.value;
             this.lastInput = props.value;
-            this.validate(newState.value);
+            this.validate(newState.value, props);
         }
 
         this.setState(newState);
