@@ -37,6 +37,71 @@ stories.add('Icon button', () => (
     </div>
 ));
 
+class LoaderButtons extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            progress: 0
+        };
+        this.random = [Math.random(), Math.random(), Math.random(), Math.random()];
+
+        this.updateProgress = this.updateProgress.bind(this);
+    }
+    updateProgress() {
+        var knobValue = this.step;
+        this.setState({
+            progress: ((this.state.progress + knobValue) % 100 + (knobValue == 0 ? 0 : 1))
+        });
+    }
+    componentWillUnmount() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+    }
+    render() {
+        this.step = number('Step', 5, {
+            range: true,
+            min: 0,
+            max: 100,
+            step: 0.1
+        });
+        this.speed = number('Update interval', 1000, {
+            range: true,
+            min: 0,
+            max: 1000,
+            step: 0.1
+        });
+
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(this.updateProgress, this.speed);
+
+        return (
+            <div className="spacing">
+                <Button raised onClick={() => {
+                    this.random = [Math.random(), Math.random(), Math.random(), Math.random()];
+                    this.forceUpdate();
+                }}>Refresh static progress</Button>
+                <br />
+                <Button loading={this.random[0]} flat>Loading</Button>
+                <Button loading={this.random[1]} raised>Loading</Button>
+                <Button loading flat>Loading</Button>
+                <Button loading raised>Loading</Button>
+                <br />
+                <Button loading={this.random[2]} flat disabled>Loading</Button>
+                <Button loading={this.random[3]} raised disabled>Loading</Button>
+                <Button loading flat disabled>Loading</Button>
+                <Button loading raised disabled>Loading</Button>
+                <br />
+                <Button loading={this.state.progress} flat>Progressing</Button>
+            </div>
+        );
+    }
+}
+stories.add('Loader buttons', () => <LoaderButtons />);
+
 stories.add('Big button (multi-touch test)', () => (
     <div>
         <Button raised className="bigButton">BIG button</Button>
