@@ -31,6 +31,12 @@ stories.add('Flat & raised', () => (
     </div>
 ));
 
+stories.add('Icon button', () => (
+    <div>
+        <Button icon="play" raised></Button>
+    </div>
+));
+
 stories.add('Big button (multi-touch test)', () => (
     <div>
         <Button raised className="bigButton">BIG button</Button>

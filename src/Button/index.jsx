@@ -10,6 +10,7 @@ class Button extends React.Component {
         className: PropTypes.string,
         children: PropTypes.node,
         onClick: PropTypes.func,
+        icon: PropTypes.string,
         raised: PropTypes.bool,
         flat: PropTypes.bool,
         ripple: PropTypes.bool,
@@ -144,8 +145,9 @@ class Button extends React.Component {
         var classes = classnames(this.props.className, 'materialButton', {
             flat: this.props.flat,
             raised: this.props.raised,
+            icon: this.props.icon,
             disabled: this.props.disabled
-        });
+        }, this.props.icon);
         var eventListeners;
         if (!this.props.disabled) {
             eventListeners = {
@@ -177,16 +179,16 @@ class Button extends React.Component {
                                 this.rippleController = ripples;
                             }}
                         />
-                        : ''
+                        : null
                 }
                 {this.props.children}
                 {
-                    classes.indexOf('iconBtn') >= 0 ?
+                    this.props.icon ?
                         <span className="icon">
                             <span className="s1"></span>
                             <span className="s2"></span>
                             <span className="s3"></span>
-                        </span> : ''
+                        </span> : null
                 }
             </Elem>
         );

@@ -62,7 +62,7 @@
     }
     $spanSize: 30px;
 
-    &.iconBtn {
+    &.icon {
         overflow: hidden;
         transform: translateZ(0);
         transition: transform 0.5s;
@@ -93,147 +93,147 @@
                 transition: transform 0.5s, background 0.5s;
             }
         }
-    }
-    &.play .icon {
-        transform: translate($spanSize / 2, 0) scale(1.6, 1);
-    }
-    &.play .icon > span {
-        transform: rotate(-45deg) translate($spanSize / -2, $spanSize / -2) scale(1, 1);
-    }
-    &.pause .icon > span {
-        transform: scale(0.4, 1) translate($spanSize / 20 * 16 * -1, 0);
+        &.play .icon {
+            transform: translate($spanSize / 2, 0) scale(1.6, 1);
+        }
+        &.play .icon > span {
+            transform: rotate(-45deg) translate($spanSize / -2, $spanSize / -2) scale(1, 1);
+        }
+        &.pause .icon > span {
+            transform: scale(0.4, 1) translate($spanSize / 20 * 16 * -1, 0);
 
-        &.s3 {
-            transform: scale(0.4, 1) translate($spanSize / 20 * 16, 0);
+            &.s3 {
+                transform: scale(0.4, 1) translate($spanSize / 20 * 16, 0);
+            }
         }
-    }
-    &.stop .icon {
-        transform: scale(0.8, 0.8);
-    }
-    &.menu .icon > span {
-        transform: scale(1, 0.1) translate(0, $spanSize * -3);
+        &.stop .icon {
+            transform: scale(0.8, 0.8);
+        }
+        &.menu .icon > span {
+            transform: scale(1, 0.1) translate(0, $spanSize * -3);
 
-        &.s2 {
-            transform: scale(1, 0.1) translate(0, 0);
+            &.s2 {
+                transform: scale(1, 0.1) translate(0, 0);
+            }
+            &.s3 {
+                transform: scale(1, 0.1) translate(0, $spanSize * 3);
+            }
         }
-        &.s3 {
-            transform: scale(1, 0.1) translate(0, $spanSize * 3);
-        }
-    }
-    &.close .icon {
-        transform: rotate(45deg);
-    }
-    &.close .icon > span,
-    &.plus .icon > span {
-        transform: scale(1, 0.1) translate(0, 0);
-
-        &.s3 {
-            transform: scale(0.1, 1);
-        }
-    }
-    &.minus .icon > span {
-        transform: scale(1, 0.2);
-    }
-    &.more .icon > span {
-        border-radius: $spanSize;
-        transform: scale(0.2, 0.2) translate($spanSize * 3 / -2, 0);
-
-        &.s2 {
-            transform: scale(0.2, 0.2) translate(0, 0);
-        }
-        &.s3 {
-            transform: scale(0.2, 0.2) translate($spanSize * 3 / 2, 0);
-        }
-    }
-    &.topArrow .icon > span {
-        width: 0.4em;
-        height: 1.8em;
-        transform: translate($spanSize / 20 * 8, $spanSize / 10);
-
-        &.s2 {
-            height: $spanSize / 20 * 14;
-            transform: translate($spanSize / 2, 0) rotate(45deg);
-            transform-origin: 0 0;
-        }
-        &.s3 {
-            height: $spanSize / 20 * 14;
-            transform: translate($spanSize / 20 * 6, 0) rotate(-45deg);
-            transform-origin: 100% 0;
-        }
-    }
-    &.bottomArrow .icon > span {
-        width: 0.4em;
-        height: 1.8em;
-        transform: translate($spanSize / 20 * 8, 0);
-
-        &.s2 {
-            height: $spanSize / 20 * 14;
-            transform: translate($spanSize / 20 * 6, $spanSize / 20 * 6) rotate(45deg);
-            transform-origin: 100% 100%;
-        }
-        &.s3 {
-            height: $spanSize / 20 * 14;
-            transform: translate($spanSize / 2, $spanSize / 20 * 6) rotate(-45deg);
-            transform-origin: 0 100%;
-        }
-    }
-    &.rightArrow .icon > span {
-        width: $spanSize / 20 * 18;
-        height: $spanSize / 20 * 4;
-        transform: translate(0, $spanSize / 20 * 8);
-
-        &.s2 {
-            width: $spanSize / 20 * 14;
-            transform: translate($spanSize / 20 * 6, $spanSize / 2) rotate(45deg);
-            transform-origin: 100% 0;
-        }
-        &.s3 {
-            width: $spanSize / 20 * 14;
-            transform: translate($spanSize / 20 * 6, $spanSize / 20 * 6) rotate(-45deg);
-            transform-origin: 100% 100%;
-        }
-    }
-    &.leftArrow .icon > span {
-        width: $spanSize / 20 * 18;
-        height: $spanSize / 20 * 4;
-        transform: translate($spanSize / 10, $spanSize / 20 * 8);
-
-        &.s2 {
-            width: $spanSize / 20 * 14;
-            transform: translate(0, $spanSize / 20 * 6) rotate(45deg);
-            transform-origin: 0 100%;
-        }
-        &.s3 {
-            width: $spanSize / 20 * 14;
-            transform: translate(0, $spanSize / 2) rotate(-45deg);
-            transform-origin: 0 0;
-        }
-    }
-    &.checked .icon > span {
-        width: $spanSize / 2;
-        height: $spanSize / 20 * 4;
-        transform: translate($spanSize / 20 * -3, $spanSize / 20 * 14) rotate(45deg);
-        transform-origin: 100% 100%;
-
-        &.s3 {
-            width: $spanSize / 20 * 18;
-            transform: translate($spanSize / 20 * 7, $spanSize / 20 * 14) rotate(-45deg);
-            transform-origin: 0 100%;
-        }
-    }
-    &.heart .icon > span {
-        top: $spanSize / 10;
-        left: $spanSize / 2;
-        width: $spanSize / 2;
-        height: $spanSize / 20 * 17;
-        border-radius: $spanSize / 2 $spanSize / 2 0 0;
-        transform: rotate(-45deg);
-        transform-origin: 0 100%;
-
-        &.s3 {
-            left: 0;
+        &.close .icon {
             transform: rotate(45deg);
+        }
+        &.close .icon > span,
+        &.plus .icon > span {
+            transform: scale(1, 0.1) translate(0, 0);
+
+            &.s3 {
+                transform: scale(0.1, 1);
+            }
+        }
+        &.minus .icon > span {
+            transform: scale(1, 0.2);
+        }
+        &.more .icon > span {
+            border-radius: $spanSize;
+            transform: scale(0.2, 0.2) translate($spanSize * 3 / -2, 0);
+
+            &.s2 {
+                transform: scale(0.2, 0.2) translate(0, 0);
+            }
+            &.s3 {
+                transform: scale(0.2, 0.2) translate($spanSize * 3 / 2, 0);
+            }
+        }
+        &.topArrow .icon > span {
+            width: 0.4em;
+            height: 1.8em;
+            transform: translate($spanSize / 20 * 8, $spanSize / 10);
+
+            &.s2 {
+                height: $spanSize / 20 * 14;
+                transform: translate($spanSize / 2, 0) rotate(45deg);
+                transform-origin: 0 0;
+            }
+            &.s3 {
+                height: $spanSize / 20 * 14;
+                transform: translate($spanSize / 20 * 6, 0) rotate(-45deg);
+                transform-origin: 100% 0;
+            }
+        }
+        &.bottomArrow .icon > span {
+            width: 0.4em;
+            height: 1.8em;
+            transform: translate($spanSize / 20 * 8, 0);
+
+            &.s2 {
+                height: $spanSize / 20 * 14;
+                transform: translate($spanSize / 20 * 6, $spanSize / 20 * 6) rotate(45deg);
+                transform-origin: 100% 100%;
+            }
+            &.s3 {
+                height: $spanSize / 20 * 14;
+                transform: translate($spanSize / 2, $spanSize / 20 * 6) rotate(-45deg);
+                transform-origin: 0 100%;
+            }
+        }
+        &.rightArrow .icon > span {
+            width: $spanSize / 20 * 18;
+            height: $spanSize / 20 * 4;
+            transform: translate(0, $spanSize / 20 * 8);
+
+            &.s2 {
+                width: $spanSize / 20 * 14;
+                transform: translate($spanSize / 20 * 6, $spanSize / 2) rotate(45deg);
+                transform-origin: 100% 0;
+            }
+            &.s3 {
+                width: $spanSize / 20 * 14;
+                transform: translate($spanSize / 20 * 6, $spanSize / 20 * 6) rotate(-45deg);
+                transform-origin: 100% 100%;
+            }
+        }
+        &.leftArrow .icon > span {
+            width: $spanSize / 20 * 18;
+            height: $spanSize / 20 * 4;
+            transform: translate($spanSize / 10, $spanSize / 20 * 8);
+
+            &.s2 {
+                width: $spanSize / 20 * 14;
+                transform: translate(0, $spanSize / 20 * 6) rotate(45deg);
+                transform-origin: 0 100%;
+            }
+            &.s3 {
+                width: $spanSize / 20 * 14;
+                transform: translate(0, $spanSize / 2) rotate(-45deg);
+                transform-origin: 0 0;
+            }
+        }
+        &.checked .icon > span {
+            width: $spanSize / 2;
+            height: $spanSize / 20 * 4;
+            transform: translate($spanSize / 20 * -3, $spanSize / 20 * 14) rotate(45deg);
             transform-origin: 100% 100%;
+
+            &.s3 {
+                width: $spanSize / 20 * 18;
+                transform: translate($spanSize / 20 * 7, $spanSize / 20 * 14) rotate(-45deg);
+                transform-origin: 0 100%;
+            }
+        }
+        &.heart .icon > span {
+            top: $spanSize / 10;
+            left: $spanSize / 2;
+            width: $spanSize / 2;
+            height: $spanSize / 20 * 17;
+            border-radius: $spanSize / 2 $spanSize / 2 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+
+            &.s3 {
+                left: 0;
+                transform: rotate(45deg);
+                transform-origin: 100% 100%;
+            }
         }
     }
 }
