@@ -15,13 +15,19 @@ class Button extends React.Component {
         flat: PropTypes.bool,
         ripple: PropTypes.bool,
         disabled: PropTypes.bool,
-        wrapperElem: PropTypes.node
+        wrapperElem: PropTypes.node,
+        loading: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.bool,
+            PropTypes.number
+        ])
     }
     static defaultProps = {
         wrapperElem: 'div',
         ripple: true,
         flat: false,
         raised: false,
+        loading: false,
         onClick: () => { }
     }
     static getTouchIDs(touches) {
@@ -142,12 +148,41 @@ class Button extends React.Component {
         this.touches = touches;
     }
     render() {
+        var loading = this.props.loading === 0 ? '0' : this.props.loading;
+        if (loading) {
+            var indeterminate;
+            if (typeof this.props.loading != 'boolean' && !isNaN(Number(this.props.loading))) {
+                indeterminate = false;
+            }
+            else {
+                indeterminate = true;
+            }
+        }
+
         var classes = classnames(this.props.className, 'materialButton', {
             flat: this.props.flat,
             raised: this.props.raised,
             icon: this.props.icon,
-            disabled: this.props.disabled
-        }, this.props.icon);
+            disabled: this.props.disabled,
+            'materialButton--loading': loading
+        }, this.props.icon, {
+                'materialButton--indeterminate': loading && indeterminate,
+                'materialButton--determinate': loading && !indeterminate
+            });
+
+        var progress;
+        var loaderStyle = {};
+        if (!indeterminate) {
+            progress = Number(this.props.loading);
+            if (progress >= 0 && progress <= 1) {
+                progress = progress * 100;
+            }
+
+            loaderStyle = {
+                width: progress + '%'
+            };
+        }
+
         var eventListeners;
         if (!this.props.disabled) {
             eventListeners = {
@@ -179,6 +214,13 @@ class Button extends React.Component {
                                 this.rippleController = ripples;
                             }}
                         />
+                        : null
+                }
+                {
+                    loading ?
+                        <div className="materialButton__loader">
+                            <div className="materialButton__loaderHighlight" style={loaderStyle}></div>
+                        </div>
                         : null
                 }
                 {this.props.children}

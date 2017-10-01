@@ -28,3 +28,8 @@ body {
     box-sizing: border-box;
     transition: transform 0.5s, width 0.5s, height 0.5s, font-size 0.5s, box-shadow 0.3s, background 0.3s;
 }
+.spacing {
+    .materialButton {
+        margin: 20px;
+    }
+}
