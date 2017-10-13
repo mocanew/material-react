@@ -107,9 +107,15 @@
         opacity: 0;
         transition: opacity 0.2s, color 0.2s;
     }
-    &.error {
+    &.showMessage {
         margin-bottom: 45px;
 
+        .message {
+            color: $grey-500;
+            opacity: 1;
+        }
+    }
+    &.error {
         .bar {
             &::after,
             &::before {
@@ -119,7 +125,6 @@
         }
         .message {
             color: $red-500;
-            opacity: 1;
         }
     }
 }
