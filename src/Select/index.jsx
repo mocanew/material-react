@@ -9,7 +9,13 @@ import Button from '../Button/';
 class Select extends React.Component {
     static propTypes = {
         className: PropTypes.string,
-        options: PropTypes.array,
+        options: PropTypes.arrayOf(PropTypes.shape({
+            value: PropTypes.any,
+            text: PropTypes.string.isRequired,
+            children: PropTypes.node,
+            placeholder: PropTypes.bool,
+            selected: PropTypes.bool
+        })),
         value: PropTypes.string,
         width: PropTypes.number,
         height: PropTypes.number,
@@ -247,7 +253,7 @@ class Select extends React.Component {
                         onClick={this.clickLi.bind(this, key)}
                         className={classes}
                         key={key}>
-                        {option.text}
+                        {option.children || option.text}
                     </Button>
                 );
             });
@@ -259,7 +265,7 @@ class Select extends React.Component {
                     wrapperElem='li'
                     className="selected"
                     key={this.state.selected.key}>
-                    {this.state.selected.text}
+                    {this.state.selected.children || this.state.selected.text}
                 </Button>
             );
         }
