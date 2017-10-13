@@ -25,11 +25,10 @@ class Input extends React.Component {
         tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         maxLength: PropTypes.string,
 
-        message: PropTypes.string,
-
         className: PropTypes.string,
         style: PropTypes.object,
         validator: PropTypes.func,
+        validateOnInput: PropTypes.bool,
         inputRef: PropTypes.func,
         onInput: PropTypes.func,
         onChange: PropTypes.func,
@@ -38,7 +37,6 @@ class Input extends React.Component {
     }
     static defaultProps = {
         required: false,
-        message: 'This field is required',
         inputRef: () => { },
         onInput: () => { },
         onChange: () => { },
@@ -48,18 +46,22 @@ class Input extends React.Component {
     }
     static defaultValidator(inputValue, options) {
         if (typeof inputValue != 'string') {
-            return;
+            return null;
         }
 
-        return {
-            empty: inputValue.length == 0,
-            error: options.required && inputValue.trim().length == 0 ? true : false
-        };
+        if (inputValue.length == 0 && options.required && inputValue.trim().length == 0) {
+            return {
+                message: 'All fields are required',
+                error: true
+            };
+        }
+
+        return null;
     }
     constructor(props) {
         super(props);
         this.state = {
-            error: false,
+            showMessage: false,
             empty: true,
             value: ''
         };
@@ -70,14 +72,12 @@ class Input extends React.Component {
         this.onBlur = this.onBlur.bind(this);
         this.parseProps = this.parseProps.bind(this);
     }
-    highlightError() {
-        if (!this.state.error) return;
+    manualMessage(message, isError) {
         this.setState({
-            error: false
+            showMessage: typeof message == 'string' ? message.length : message,
+            message: message,
+            error: isError
         });
-        setTimeout(() => this.setState({
-            error: true
-        }), 500);
     }
     onInput(e) {
         var input = e.target.value;
@@ -91,53 +91,46 @@ class Input extends React.Component {
             newState.empty = false;
         }
 
+        if (this.props.validateOnInput) {
+            this.validate(input, this.props, false);
+        }
+
         this.setState(newState);
     }
     onBlur() {
-        var input = this.state.value;
-        input = this.validate(input);
+        var validatedValue = this.validate(this.state.value, this.props);
 
-        if (this.lastInput != input) {
-            this.props.onChange(input);
-            this.lastInput = input;
+        if (this.lastInput != validatedValue) {
+            this.props.onChange(validatedValue);
+            this.lastInput = validatedValue;
         }
         this.props.onBlur();
     }
-    validate(input, newProps) {
-        var props = newProps ? newProps : this.props;
+    validate(input, props, setValue = true) {
         var validatorResponse = props.validator(input, {
-            required: props.required
-        });
-        if (!validatorResponse) {
-            this.setState({
-                error: true
-            });
-            return;
-        }
+            required: props.required,
+            canTrim: setValue
+        }) || {};
 
-        if (!validatorResponse.message) {
-            validatorResponse.message = props.message;
-        }
-        if (validatorResponse.value) {
+        if (setValue && validatorResponse.value !== undefined) {
             input = validatorResponse.value;
         }
+
         var newState = {
-            empty: validatorResponse.empty,
+            empty: typeof input == 'string' ? !input.length : !input,
             error: validatorResponse.error,
-            message: '',
+            message: validatorResponse.message,
+            showMessage: validatorResponse.message !== null && validatorResponse.message !== undefined,
             value: input
         };
-        if ((newState.empty && props.required) || newState.error) {
-            newState.message = validatorResponse.message;
-        }
         this.setState(newState);
-        if (typeof validatorResponse.callback == 'function') {
-            setTimeout(validatorResponse.callback);
-        }
         return input;
     }
     componentWillMount() {
         this.parseProps(this.props);
+    }
+    componentDidMount() {
+        this.validate(undefined, this.props, false);
     }
     componentWillReceiveProps(newProps) {
         this.parseProps(newProps);
@@ -186,8 +179,13 @@ class Input extends React.Component {
         var parentClasses = classNames(this.props.className, {
             materialInput: true,
             error: this.state.error,
+            showMessage: this.state.showMessage,
             empty: this.state.empty
         });
+        console.log(this.state.showMessage);
+        if (this.state.message) {
+            this.lastMessage = this.state.message;
+        }
 
         var field;
         if (this.props.multiline) {
@@ -216,7 +214,7 @@ class Input extends React.Component {
                 <span className="highlight" />
                 <span className="bar" />
                 <label>{this.props.placeholder}</label>
-                <div className="message">{this.state.message}</div>
+                <div className="message">{this.state.message || this.lastMessage}</div>
             </div>
         );
     }

@@ -15,6 +15,35 @@ function randomString() {
     return text;
 }
 
+function usernameValidator(input, options) {
+    var ret = {
+        message: 'Accepted symbols are letters, numbers and -._',
+        error: false
+    };
+
+    // on the first render, the input is undefined
+    if (typeof input != 'string') {
+        return ret;
+    }
+
+    if (options.canTrim) {
+        if (input != input.trim()) {
+            ret.value = input.trim();
+        }
+        input = input.trim();
+    }
+
+    if (!input.length && options.required) {
+        ret.message = 'We don\'t accept empty usernames!';
+        ret.error = true;
+    }
+    else if (!input.match(/^[a-zA-Z0-9-_.]+$/g)) {
+        ret.message = 'Accepted symbols are letters, numbers and -._';
+        ret.error = true;
+    }
+    return ret;
+}
+
 storiesOf('Input', module)
     .add('Required & not required', () => (
         <div>
@@ -33,6 +62,12 @@ storiesOf('Input', module)
             <Input placeholder="Field 1" tabIndex="1" />
             <Input placeholder="Field 2" tabIndex="3" />
             <Input placeholder="Field 3" tabIndex="2" />
+        </div>
+    ))
+    .add('Custom validator', () => (
+        <div>
+            <Input required placeholder="Username * (validated on blur)" validator={usernameValidator} />
+            <Input required validateOnInput placeholder="Username * (validated on input)" validator={usernameValidator} />
         </div>
     ))
     .add('Stress test (1.000 inputs)', () => {
