@@ -133,8 +133,11 @@ class Input extends React.Component {
             error: validatorResponse.error,
             message: validatorResponse.message,
             showMessage: validatorResponse.message !== null && validatorResponse.message !== undefined,
-            value: input
         };
+        if (setValue) {
+            newState.value = input;
+        }
+
         this.setState(newState);
         return input;
     }
@@ -182,7 +185,7 @@ class Input extends React.Component {
             newState.empty = !props.value.length;
             newState.value = props.value;
             this.lastInput = props.value;
-            this.validate(newState.value, props);
+            this.validate(newState.value, props, false);
         }
 
         this.setState(newState);
