@@ -70,6 +70,7 @@ class Input extends React.Component {
 
         this.validate = this.validate.bind(this);
         this.onInput = this.onInput.bind(this);
+        this.onFocus = this.onFocus.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.parseProps = this.parseProps.bind(this);
     }
@@ -90,6 +91,7 @@ class Input extends React.Component {
         };
         if (this.state.empty && input.length) {
             newState.empty = false;
+            this.validate(input, this.props, false);
         }
 
         if (this.props.validateOnInput) {
@@ -98,14 +100,22 @@ class Input extends React.Component {
 
         this.setState(newState);
     }
-    onBlur() {
+    onFocus(e) {
+        if (this.state.value === undefined) {
+            this.setState({
+                value: ''
+            });
+        }
+        this.props.onFocus(e);
+    }
+    onBlur(e) {
         var validatedValue = this.validate(this.state.value, this.props);
 
         if (this.lastInput != validatedValue) {
             this.props.onChange(validatedValue);
             this.lastInput = validatedValue;
         }
-        this.props.onBlur();
+        this.props.onBlur(e);
     }
     validate(input, props, setValue = true) {
         var validatorResponse = props.validator(input, {
@@ -196,7 +206,7 @@ class Input extends React.Component {
                 {...this.state.attributes}
                 onInput={this.onInput}
                 onBlur={this.onBlur}
-                onFocus={this.props.onFocus}
+                onFocus={this.onFocus}
                 value={this.state.value}
                 ref={this.props.inputRef} />;
         }
@@ -206,7 +216,7 @@ class Input extends React.Component {
                 {...this.state.attributes}
                 onInput={this.onInput}
                 onBlur={this.onBlur}
-                onFocus={this.props.onFocus}
+                onFocus={this.onFocus}
                 value={this.state.value}
                 ref={this.props.inputRef} />;
         }
