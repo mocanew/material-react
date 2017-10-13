@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import Input from './index.jsx';
+import Button from '../Button';
 
 import '../_story.scss';
 
@@ -64,12 +65,20 @@ storiesOf('Input', module)
             <Input placeholder="Field 3" tabIndex="2" />
         </div>
     ))
-    .add('Custom validator', () => (
-        <div>
-            <Input required placeholder="Username * (validated on blur)" validator={usernameValidator} />
-            <Input required validateOnInput placeholder="Username * (validated on input)" validator={usernameValidator} />
-        </div>
-    ))
+    .add('Custom validator', () => {
+        var temp = {};
+        var triggerError = () => {
+            temp.input.setMessage('Custom error message (this could be received from a server)', true);
+        };
+        return (
+            <div>
+                <Input required placeholder="Username * (validated on blur)" validator={usernameValidator} />
+                <Input required validateOnInput placeholder="Username * (validated on input)" validator={usernameValidator} ref={ref => temp.input = ref} />
+
+                <Button raised onClick={triggerError}>Trigger error state</Button>
+            </div>
+        );
+    })
     .add('Stress test (1.000 inputs)', () => {
         var list = [];
         for (var i = 0; i < 1000; i++) {

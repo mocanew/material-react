@@ -72,7 +72,7 @@ class Input extends React.Component {
         this.onBlur = this.onBlur.bind(this);
         this.parseProps = this.parseProps.bind(this);
     }
-    manualMessage(message, isError) {
+    setMessage(message, isError) {
         this.setState({
             showMessage: typeof message == 'string' ? message.length : message,
             message: message,
@@ -182,7 +182,7 @@ class Input extends React.Component {
             showMessage: this.state.showMessage,
             empty: this.state.empty
         });
-        console.log(this.state.showMessage);
+
         if (this.state.message) {
             this.lastMessage = this.state.message;
         }
