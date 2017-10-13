@@ -100,17 +100,19 @@
         opacity: 0.5;
     }
     .message {
-        margin-top: 5px;
+        margin-top: 0;
         font-size: 14px;
-        line-height: 14px;
+        line-height: 0;
         text-align: left;
         opacity: 0;
-        transition: opacity 0.2s, color 0.2s;
+        transition: opacity 0.2s, color 0.2s, margin 0.2s, line-height 0.2s;
     }
     &.showMessage {
         margin-bottom: 45px;
 
         .message {
+            margin-top: 5px;
+            line-height: 14px;
             color: $grey-500;
             opacity: 1;
         }
