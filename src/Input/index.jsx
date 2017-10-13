@@ -25,6 +25,7 @@ class Input extends React.Component {
         tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         maxLength: PropTypes.string,
 
+        message: PropTypes.string,
         className: PropTypes.string,
         style: PropTypes.object,
         validator: PropTypes.func,
@@ -51,7 +52,7 @@ class Input extends React.Component {
 
         if (inputValue.length == 0 && options.required && inputValue.trim().length == 0) {
             return {
-                message: 'All fields are required',
+                message: options.message || 'All fields are required',
                 error: true
             };
         }
@@ -109,7 +110,8 @@ class Input extends React.Component {
     validate(input, props, setValue = true) {
         var validatorResponse = props.validator(input, {
             required: props.required,
-            canTrim: setValue
+            canTrim: setValue,
+            message: props.message
         }) || {};
 
         if (setValue && validatorResponse.value !== undefined) {
