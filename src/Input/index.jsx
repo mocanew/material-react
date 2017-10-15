@@ -63,7 +63,6 @@ class Input extends React.Component {
         super(props);
         this.state = {
             showMessage: false,
-            empty: true,
             value: ''
         };
         this.lastInput = '';
@@ -89,10 +88,6 @@ class Input extends React.Component {
         var newState = {
             value: input
         };
-        if (this.state.empty && input.length) {
-            newState.empty = false;
-            this.validate(input, this.props, false);
-        }
 
         if (this.props.validateOnInput) {
             this.validate(input, this.props, false);
@@ -129,7 +124,6 @@ class Input extends React.Component {
         }
 
         var newState = {
-            empty: typeof input == 'string' ? !input.length : !input,
             error: validatorResponse.error,
             message: validatorResponse.message,
             showMessage: validatorResponse.message !== null && validatorResponse.message !== undefined,
@@ -182,7 +176,6 @@ class Input extends React.Component {
         }
 
         if (props.value !== undefined) {
-            newState.empty = !props.value.length;
             newState.value = props.value;
             this.lastInput = props.value;
             this.validate(newState.value, props, false);
@@ -195,7 +188,7 @@ class Input extends React.Component {
             materialInput: true,
             error: this.state.error,
             showMessage: this.state.showMessage,
-            empty: this.state.empty
+            empty: !this.state.value.length
         });
 
         if (this.state.message) {
