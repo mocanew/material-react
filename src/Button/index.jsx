@@ -189,6 +189,8 @@ class Button extends React.Component {
                 onMouseDown: this.onMouseDown,
                 onMouseUp: this.onMouseUp,
                 onMouseLeave: this.onMouseCancel,
+                onDragLeave: this.onMouseCancel,
+                onDrop: this.onMouseCancel,
                 onTouchStart: this.onTouchStart,
                 onTouchCancel: this.onTouchCancel,
                 onTouchEnd: this.onTouchEnd

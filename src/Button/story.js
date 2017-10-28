@@ -116,6 +116,12 @@ stories.add('Ripple & no ripple', () => (
     </div>
 ));
 
+stories.add('Ripple link (drag&drop behaviour)', () => (
+    <div>
+        <a href="#"><Button raised>Ripple button</Button></a>
+    </div>
+));
+
 class StressTest extends React.Component {
     constructor() {
         super();
