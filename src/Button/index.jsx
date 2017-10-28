@@ -147,7 +147,6 @@ class Button extends React.Component {
 
         var delta = Math.abs(window.scrollX - this.scroll.x) + Math.abs(window.scrollY - this.scroll.y);
         this.scroll = undefined;
-        console.log(delta);
 
         if (window.materialButtonClickTimeout) {
             clearTimeout(window.materialButtonClickTimeout);
