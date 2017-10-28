@@ -20,7 +20,8 @@ class Button extends React.Component {
             PropTypes.string,
             PropTypes.bool,
             PropTypes.number
-        ])
+        ]),
+        touchDelta: PropTypes.number
     }
     static defaultProps = {
         wrapperElem: 'div',
@@ -28,6 +29,7 @@ class Button extends React.Component {
         flat: false,
         raised: false,
         loading: false,
+        touchDelta: 10,
         onClick: () => { }
     }
     static getTouchIDs(touches) {
@@ -40,7 +42,8 @@ class Button extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ripples: []
+            ripples: [],
+            touchDelta: props.touchDelta
         };
         this.touches = [];
 
@@ -69,6 +72,7 @@ class Button extends React.Component {
                 focus: true
             });
         }
+        this.mousedDown = true;
     }
     onMouseUp(e) {
         if (window.materialButtonTouch) {
@@ -78,9 +82,15 @@ class Button extends React.Component {
         if (this.props.ripple) {
             this.rippleController.onCursorUp();
         }
+        if (!this.mousedDown) {
+            return;
+        }
+        this.mousedDown = false;
+
         this.props.onClick(e);
     }
     onMouseCancel() {
+        this.mousedDown = false;
         if (window.materialButtonTouch) {
             return;
         }
@@ -111,6 +121,10 @@ class Button extends React.Component {
             });
         }
         this.touches = touches;
+        this.scroll = {
+            x: window.scrollX,
+            y: window.scrollY
+        };
     }
     onTouchCancel(e) {
         var touches = Button.getTouchIDs(e.targetTouches);
@@ -124,8 +138,17 @@ class Button extends React.Component {
             }
         }
         this.touches = touches;
+        this.scroll = undefined;
     }
     onTouchEnd(e) {
+        if (!this.scroll) {
+            return;
+        }
+
+        var delta = Math.abs(window.scrollX - this.scroll.x) + Math.abs(window.scrollY - this.scroll.y);
+        this.scroll = undefined;
+        console.log(delta);
+
         if (window.materialButtonClickTimeout) {
             clearTimeout(window.materialButtonClickTimeout);
         }
@@ -142,7 +165,10 @@ class Button extends React.Component {
                         touchID: this.touches[i]
                     });
                 }
-                this.props.onClick(e);
+
+                if (delta <= this.state.touchDelta) {
+                    this.props.onClick(e);
+                }
             }
         }
         this.touches = touches;
