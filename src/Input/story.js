@@ -46,10 +46,16 @@ function usernameValidator(input, options) {
 }
 
 storiesOf('Input', module)
-    .add('Required & not required', () => (
+    .add('Required', () => (
         <div>
-            <Input placeholder="Name 1" name="name-1" title="Some helpful info" required={true} onChange={action('onChange 1')} onInput={action('onInput 1')} />
-            <Input placeholder="Name 2" name="name-2" title="Some helpful info" required={false} onChange={action('Change name 2')} />
+            <Input placeholder="Name 1 (required)" name="name-1" title="Some helpful info" required={true} onChange={action('onChange 1')} onInput={action('onInput 1')} />
+            <Input placeholder="Name 2 (not required)" name="name-2" title="Some helpful info" required={false} onChange={action('Change name 2')} />
+        </div>
+    ))
+    .add('Default value', () => (
+        <div>
+            <Input placeholder="Name 1 (required)" name="name-1" title="Some helpful info" defaultValue="John Doe" required />
+            <Input placeholder="Name 2 (not required)" name="name-1" title="Some helpful info" defaultValue="John Doe" />
         </div>
     ))
     .add('Multiline', () => (

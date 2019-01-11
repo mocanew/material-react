@@ -18,6 +18,7 @@ class Input extends React.Component {
         title: PropTypes.string,
         type: PropTypes.string,
         value: PropTypes.string,
+        defaultValue: PropTypes.string,
         placeholder: PropTypes.string,
 
         inputMode: PropTypes.string,
@@ -63,15 +64,14 @@ class Input extends React.Component {
         super(props);
         this.state = {
             showMessage: false,
-            value: ''
+            value: props.defaultValue || '',
+            lastInput: '',
         };
-        this.lastInput = '';
 
         this.validate = this.validate.bind(this);
         this.onInput = this.onInput.bind(this);
         this.onFocus = this.onFocus.bind(this);
         this.onBlur = this.onBlur.bind(this);
-        this.parseProps = this.parseProps.bind(this);
     }
     setMessage(message, isError) {
         this.setState({
@@ -106,9 +106,12 @@ class Input extends React.Component {
     onBlur(e) {
         var validatedValue = this.validate(this.state.value, this.props);
 
-        if (this.lastInput != validatedValue) {
+        if (this.state.lastInput != validatedValue) {
             this.props.onChange(validatedValue);
-            this.lastInput = validatedValue;
+
+            this.setState({
+                lastInput: validatedValue
+            });
         }
         this.props.onBlur(e);
     }
@@ -135,18 +138,12 @@ class Input extends React.Component {
         this.setState(newState);
         return input;
     }
-    componentWillMount() {
-        this.parseProps(this.props);
-    }
     componentDidMount() {
         this.validate(undefined, this.props, false);
     }
-    componentWillReceiveProps(newProps) {
-        this.parseProps(newProps);
-    }
-    parseProps(props) {
+    static getDerivedStateFromProps(props) {
         if (!props) {
-            return;
+            return null;
         }
 
         var newState = {
@@ -177,11 +174,10 @@ class Input extends React.Component {
 
         if (props.value !== undefined) {
             newState.value = props.value;
-            this.lastInput = props.value;
-            this.validate(newState.value, props, false);
+            newState.lastInput = props.value;
         }
 
-        this.setState(newState);
+        return newState;
     }
     render() {
         var parentClasses = classNames(this.props.className, {
@@ -199,7 +195,7 @@ class Input extends React.Component {
         if (this.props.multiline) {
             field = <textarea
                 className="input"
-                onChange={() => {}}
+                onChange={() => { }}
                 {...this.state.attributes}
                 onInput={this.onInput}
                 onBlur={this.onBlur}
@@ -210,7 +206,7 @@ class Input extends React.Component {
         else {
             field = <input
                 className="input"
-                onChange={() => {}}
+                onChange={() => { }}
                 {...this.state.attributes}
                 onInput={this.onInput}
                 onBlur={this.onBlur}
