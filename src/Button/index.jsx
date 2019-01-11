@@ -181,7 +181,10 @@ class Button extends React.Component {
             disabled,
             wrapperElem,
             children,
+
             touchDelta,
+            onClick,
+
             ...rest
         } = this.props;
 

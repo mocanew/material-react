@@ -51,13 +51,12 @@ class Select extends React.Component {
         };
     }
     static defaultValidator(e) {
-        e = e.text;
+        e = typeof e == 'string' ? e : e.text;
         return e && e.length <= 0;
     }
     constructor(props) {
         super(props);
         var state = {
-            options: [],
             value: '',
             message: 'Please select something',
             selected: null,
@@ -73,37 +72,9 @@ class Select extends React.Component {
         });
         this.state = state;
 
-        this.parseOptions = this.parseOptions.bind(this);
         this.close = this.close.bind(this);
         this.open = this.open.bind(this);
         this.clickBody = this.clickBody.bind(this);
-    }
-    parseOptions(options) {
-        var tempState = {};
-        options.forEach((value, i) => {
-            if (typeof value != 'object') {
-                value = {
-                    text: value
-                };
-                options[i] = value;
-            }
-
-            if (!tempState.selected && value.placeholder) {
-                tempState.selected = value;
-                tempState.placeholder = value;
-            }
-
-            if (value.selected) {
-                tempState.selected = value;
-            }
-
-            if (value.key === undefined) {
-                value.key = i;
-            }
-        });
-        tempState.options = options;
-        this.setState(tempState);
-        return options;
     }
     close() {
         if (!this.state.open) {
@@ -121,7 +92,7 @@ class Select extends React.Component {
         smoothscroll(0, this.props.animationDuration, null, this.select);
 
         this.setState({
-            error: this.props.validator(this.state.selected.text) || (this.state.required && this.state.selected == this.state.placeholder)
+            error: this.props.validator(this.state.selected.text) || (this.props.required && this.state.selected == this.state.placeholder)
         });
     }
     open() {
@@ -139,6 +110,7 @@ class Select extends React.Component {
         smoothscroll(pos, this.props.animationDuration, null, this.select);
     }
     clickLi(id) {
+        console.log(id);
         if (!this.state.open) {
             return;
         }
@@ -147,10 +119,10 @@ class Select extends React.Component {
         this.setState({
             value: selected.text,
             selected: selected
+        }, () => {
+            this.props.onChange(selected.text, selected);
+            this.close();
         });
-
-        this.props.onChange(selected.text, selected);
-        this.close();
     }
     clickBody(e) {
         if (!this.state.open) {
@@ -175,9 +147,6 @@ class Select extends React.Component {
             this.close();
         }
     }
-    componentWillMount() {
-        this.parseOptions(this.state.options);
-    }
     componentDidMount() {
         window.addEventListener('mouseup', this.clickBody);
         window.addEventListener('touchend', this.clickBody);
@@ -189,10 +158,53 @@ class Select extends React.Component {
         window.removeEventListener('mouseup', this.clickBody);
         window.removeEventListener('touchend', this.clickBody);
     }
-    componentWillReceiveProps(newProps) {
+    static getDerivedStateFromProps(newProps, oldState) {
         if (newProps.options) {
-            this.parseOptions(newProps.options);
+            let options = newProps.options;
+            let oldOptions = oldState.options || [];
+
+            var tempState = {
+                options: [],
+            };
+            options.forEach((value, i) => {
+                if (typeof value != 'object') {
+                    value = {
+                        text: value
+                    };
+                    options[i] = value;
+                }
+                if (oldOptions[i] &&
+                    options[i].text === oldOptions[i].text &&
+                    options[i].value === oldOptions[i].value &&
+                    options[i].placeholder === oldOptions[i].placeholder &&
+                    options[i].selected === oldOptions[i].selected &&
+                    (options[i].key === undefined ? i : options[i].key) === oldOptions[i].key) {
+                    return;
+                }
+
+                if (!tempState.selected && value.placeholder) {
+                    tempState.selected = value;
+                    tempState.placeholder = value;
+                }
+
+                if (value.selected) {
+                    tempState.selected = value;
+                }
+
+                if (value.key === undefined) {
+                    value.key = i;
+                }
+                tempState.options[i] = value;
+            });
+            if (tempState.options.length == 0 && options.length != 0) {
+                return null;
+            }
+            else {
+                console.log(tempState);
+                return tempState;
+            }
         }
+        return null;
     }
     render() {
         var wrapperClasses = classnames(this.props.className, {
@@ -203,7 +215,7 @@ class Select extends React.Component {
             animate: this.props.animation
         });
         var wrapperStyle = {
-            width: this.props.inline ? this.props.width : false
+            width: this.props.inline ? this.props.width : false,
         };
         var selectClasses = classnames({
             select: true,
