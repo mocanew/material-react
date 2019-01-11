@@ -1,6 +1,6 @@
 {
   "name": "material-react",
-  "version": "1.0.0-26",
+  "version": "1.0.0-27",
   "description": "",
   "main": "./dist",
   "keywords": [
@@ -57,7 +57,7 @@
     "jsx-loader": "^0.13.2",
     "less": "^2.7.1",
     "less-loader": "^4.0.4",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.9.2",
     "nodemon": "^1.9.2",
     "npm-run-all": "^4.0.2",
     "postcss-loader": "^2.0.6",

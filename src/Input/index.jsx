@@ -199,6 +199,7 @@ class Input extends React.Component {
         if (this.props.multiline) {
             field = <textarea
                 className="input"
+                onChange={() => {}}
                 {...this.state.attributes}
                 onInput={this.onInput}
                 onBlur={this.onBlur}
@@ -209,6 +210,7 @@ class Input extends React.Component {
         else {
             field = <input
                 className="input"
+                onChange={() => {}}
                 {...this.state.attributes}
                 onInput={this.onInput}
                 onBlur={this.onBlur}
