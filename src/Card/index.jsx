@@ -9,17 +9,17 @@ class Card extends React.Component {
     constructor(props) {
         super(props);
         var defaults = {
-            shadow: true
+            shadow: true,
         };
         this.state = _.merge({}, defaults, _.pick(props, Object.keys(defaults)));
     }
     render() {
         var classes = classnames({
             materialCard: true,
-            shadow: this.state.shadow
+            shadow: this.state.shadow,
         });
         return (
-            <div className= {classes}>
+            <div className={classes}>
                 <div className="wrapper">
                     {this.props.children}
                 </div>
@@ -31,8 +31,8 @@ Card.propTypes = {
     shadow: PropTypes.bool,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ])
+        PropTypes.node,
+    ]),
 };
 
 export default Card;

@@ -21,6 +21,16 @@
         "react"
     ],
     "rules": {
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
+        "curly": [
+            1,
+            "all"
+        ],
+        "react/no-danger": 0,
+        "react/no-find-dom-node": 0,
         "indent": [
             0,
             4

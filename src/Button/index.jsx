@@ -18,9 +18,9 @@ class Button extends React.Component {
         loading: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.bool,
-            PropTypes.number
+            PropTypes.number,
         ]),
-        touchDelta: PropTypes.number
+        touchDelta: PropTypes.number,
     }
     static defaultProps = {
         wrapperElem: 'div',
@@ -29,7 +29,7 @@ class Button extends React.Component {
         raised: false,
         loading: false,
         touchDelta: 10,
-        onClick: () => { }
+        onClick: () => { },
     }
     static getTouchIDs(touches) {
         var result = [];
@@ -51,7 +51,7 @@ class Button extends React.Component {
             'onMouseCancel',
             'onTouchStart',
             'onTouchCancel',
-            'onTouchEnd'
+            'onTouchEnd',
         ];
         functionsToBind.forEach(fn => {
             this[fn] = this[fn].bind(this);
@@ -67,7 +67,7 @@ class Button extends React.Component {
                 x: e.pageX,
                 y: e.pageY,
                 parent: this.button,
-                focus: true
+                focus: true,
             });
         }
         this.mousedDown = true;
@@ -95,7 +95,7 @@ class Button extends React.Component {
 
         if (this.props.ripple) {
             this.rippleController.onCursorUp({
-                cancel: true
+                cancel: true,
             });
         }
     }
@@ -115,13 +115,13 @@ class Button extends React.Component {
                 x: e.targetTouches[i].pageX,
                 y: e.targetTouches[i].pageY,
                 parent: this.button,
-                focus: true
+                focus: true,
             });
         }
         this.touches = touches;
         this.scroll = {
             x: window.scrollX,
-            y: window.scrollY
+            y: window.scrollY,
         };
     }
     onTouchCancel(e) {
@@ -131,7 +131,7 @@ class Button extends React.Component {
             if (this.props.ripple && touches.indexOf(this.touches[i]) == -1) {
                 this.rippleController.onCursorUp({
                     touchID: this.touches[i],
-                    cancel: true
+                    cancel: true,
                 });
             }
         }
@@ -159,7 +159,7 @@ class Button extends React.Component {
             if (touches.indexOf(this.touches[i]) == -1) {
                 if (this.props.ripple) {
                     this.rippleController.onCursorUp({
-                        touchID: this.touches[i]
+                        touchID: this.touches[i],
                     });
                 }
 
@@ -204,10 +204,10 @@ class Button extends React.Component {
             raised,
             icon,
             disabled,
-            'materialButton--loading': loading
+            'materialButton--loading': loading,
         }, icon, {
                 'materialButton--indeterminate': loading && indeterminate,
-                'materialButton--determinate': loading && !indeterminate
+                'materialButton--determinate': loading && !indeterminate,
             });
 
         var progress;
@@ -219,7 +219,7 @@ class Button extends React.Component {
             }
 
             loaderStyle = {
-                width: progress + '%'
+                width: progress + '%',
             };
         }
 
@@ -233,7 +233,7 @@ class Button extends React.Component {
                 onDrop: this.onMouseCancel,
                 onTouchStart: this.onTouchStart,
                 onTouchCancel: this.onTouchCancel,
-                onTouchEnd: this.onTouchEnd
+                onTouchEnd: this.onTouchEnd,
             };
         }
         else {

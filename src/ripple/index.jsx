@@ -5,10 +5,10 @@ import './index.scss';
 
 class RippleController extends React.PureComponent {
     static propTypes = {
-        rippleDuration: PropTypes.number
+        rippleDuration: PropTypes.number,
     }
     static defaultProps = {
-        rippleDuration: 1000
+        rippleDuration: 1000,
     }
     static defaultRipple = {
         id: undefined,
@@ -25,7 +25,7 @@ class RippleController extends React.PureComponent {
         endAnimationDuration: 500,
         timeoutID: undefined,
         startTimeoutID: undefined,
-        renderedOnce: false
+        renderedOnce: false,
     }
     constructor() {
         super();
@@ -144,7 +144,7 @@ class RippleController extends React.PureComponent {
             x: x,
             y: y,
             size: size,
-            focus: options.focus
+            focus: options.focus,
         });
         var touchID = options.touchID || 0;
         this.touches[touchID] = ripple;
@@ -176,7 +176,7 @@ class RippleController extends React.PureComponent {
             left: ripple.x,
         };
         var innerStyle = {
-            animationDuration: ripple.focusAnimationDuration + 'ms'
+            animationDuration: ripple.focusAnimationDuration + 'ms',
         };
 
         var classes = 'ripple';
@@ -187,7 +187,7 @@ class RippleController extends React.PureComponent {
                     focus: ripple.focus && !ripple.starting && !ripple.ending && !ripple.canceled,
                     canceled: ripple.focus && ripple.canceled,
                     starting: ripple.focus && ripple.starting,
-                    ending: ripple.focus && ripple.ending
+                    ending: ripple.focus && ripple.ending,
                 });
 
                 if (ripple.focus && ripple.ending && this.lastClasses.indexOf('focus') == -1) {

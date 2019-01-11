@@ -13,16 +13,16 @@ stories.addDecorator(withKnobs);
 var smallList = [
     {
         placeholder: true,
-        text: 'Choose your country...'
+        text: 'Choose your country...',
     },
     'France',
     'Romania',
-    'USA'
+    'USA',
 ];
 var longList = [
     {
         placeholder: true,
-        text: 'Choose your country...'
+        text: 'Choose your country...',
     },
     'France',
     'Belgium',
@@ -31,7 +31,7 @@ var longList = [
     'Hungary',
     'Romania',
     'Rusia',
-    'USA'
+    'USA',
 ];
 
 stories.add('Basic', () => (

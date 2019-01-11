@@ -16,7 +16,7 @@ class Checkbox extends React.Component {
         disabled: PropTypes.bool,
         wrapperElem: PropTypes.node,
         iconClass: PropTypes.string,
-        checked: PropTypes.bool
+        checked: PropTypes.bool,
     }
     static defaultProps = {
         checked: true,
@@ -24,7 +24,7 @@ class Checkbox extends React.Component {
         ripple: true,
         flat: false,
         raised: false,
-        onCheck: () => { }
+        onCheck: () => { },
     }
     static getTouchIDs(touches) {
         var result = [];
@@ -37,7 +37,7 @@ class Checkbox extends React.Component {
         super(props);
         this.state = {
             ripples: [],
-            checked: props.checked
+            checked: props.checked,
         };
         this.touches = [];
 
@@ -47,7 +47,7 @@ class Checkbox extends React.Component {
             'onMouseCancel',
             'onTouchStart',
             'onTouchCancel',
-            'onTouchEnd'
+            'onTouchEnd',
         ];
         functionsToBind.forEach(fn => {
             this[fn] = this[fn].bind(this);
@@ -63,7 +63,7 @@ class Checkbox extends React.Component {
                 center: true,
                 parent: this.button,
                 focus: true,
-                size: 48
+                size: 48,
             });
         }
     }
@@ -76,7 +76,7 @@ class Checkbox extends React.Component {
             this.rippleController.onCursorUp();
         }
         this.setState({
-            checked: !this.state.checked
+            checked: !this.state.checked,
         });
         this.props.onCheck(e);
     }
@@ -87,7 +87,7 @@ class Checkbox extends React.Component {
 
         if (this.props.ripple) {
             this.rippleController.onCursorUp({
-                cancel: true
+                cancel: true,
             });
         }
     }
@@ -107,7 +107,7 @@ class Checkbox extends React.Component {
                 center: true,
                 size: 48,
                 parent: this.button,
-                focus: true
+                focus: true,
             });
         }
         this.touches = touches;
@@ -119,7 +119,7 @@ class Checkbox extends React.Component {
             if (this.props.ripple && touches.indexOf(this.touches[i]) == -1) {
                 this.rippleController.onCursorUp({
                     touchID: this.touches[i],
-                    cancel: true
+                    cancel: true,
                 });
             }
         }
@@ -139,11 +139,11 @@ class Checkbox extends React.Component {
             if (touches.indexOf(this.touches[i]) == -1) {
                 if (this.props.ripple) {
                     this.rippleController.onCursorUp({
-                        touchID: this.touches[i]
+                        touchID: this.touches[i],
                     });
                 }
                 this.setState({
-                    checked: !this.state.checked
+                    checked: !this.state.checked,
                 });
                 this.props.onCheck(e);
             }
@@ -153,19 +153,19 @@ class Checkbox extends React.Component {
     static getDerivedStateFromProps(newProps) {
         if (newProps.checked !== undefined) {
             return {
-                checked: newProps.checked
+                checked: newProps.checked,
             };
         }
     }
     render() {
         var classes = classnames(this.props.className, 'materialCheckbox', {
             disabled: this.props.disabled,
-            checked: this.state.checked
+            checked: this.state.checked,
         });
         var iconClasses = classnames({
             fa: true,
             'fa-check': !this.props.iconClass,
-            [this.props.iconClass]: this.props.iconClass
+            [this.props.iconClass]: this.props.iconClass,
         });
         var eventListeners;
         if (!this.props.disabled) {
@@ -175,7 +175,7 @@ class Checkbox extends React.Component {
                 onMouseLeave: this.onMouseCancel,
                 onTouchStart: this.onTouchStart,
                 onTouchCancel: this.onTouchCancel,
-                onTouchEnd: this.onTouchEnd
+                onTouchEnd: this.onTouchEnd,
             };
         }
         else {

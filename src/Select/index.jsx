@@ -14,7 +14,7 @@ class Select extends React.Component {
             text: PropTypes.string.isRequired,
             children: PropTypes.node,
             placeholder: PropTypes.bool,
-            selected: PropTypes.bool
+            selected: PropTypes.bool,
         })),
         value: PropTypes.string,
         width: PropTypes.number,
@@ -25,7 +25,7 @@ class Select extends React.Component {
         onChange: PropTypes.func,
         validator: PropTypes.func,
         animation: PropTypes.bool,
-        animationDuration: PropTypes.number
+        animationDuration: PropTypes.number,
     }
     static defaultProps = {
         onChange: () => { },
@@ -35,7 +35,7 @@ class Select extends React.Component {
         inline: false,
         required: false,
         animation: true,
-        animationDuration: 300
+        animationDuration: 300,
     }
     static cumulativeOffset(element) {
         var top = 0, left = 0;
@@ -47,7 +47,7 @@ class Select extends React.Component {
 
         return {
             top: top,
-            left: left
+            left: left,
         };
     }
     static defaultValidator(e) {
@@ -62,7 +62,7 @@ class Select extends React.Component {
             selected: null,
             empty: true,
             error: false,
-            open: false
+            open: false,
         };
 
         Object.keys(state).forEach(key => {
@@ -83,16 +83,16 @@ class Select extends React.Component {
 
         this.timeout = setTimeout(() => {
             this.setState({
-                onTop: false
+                onTop: false,
             });
         }, this.props.animationDuration);
         this.setState({
-            open: false
+            open: false,
         });
         smoothscroll(0, this.props.animationDuration, null, this.select);
 
         this.setState({
-            error: this.props.validator(this.state.selected.text) || (this.props.required && this.state.selected == this.state.placeholder)
+            error: this.props.validator(this.state.selected.text) || (this.props.required && this.state.selected == this.state.placeholder),
         });
     }
     open() {
@@ -102,7 +102,7 @@ class Select extends React.Component {
         clearTimeout(this.timeout);
         this.setState({
             open: true,
-            onTop: true
+            onTop: true,
         });
 
         var pos = Math.max((this.state.options.indexOf(this.state.selected) - 2) * this.props.height, 0);
@@ -118,7 +118,7 @@ class Select extends React.Component {
         var selected = this.state.options[id];
         this.setState({
             value: selected.text,
-            selected: selected
+            selected: selected,
         }, () => {
             this.props.onChange(selected.text, selected);
             this.close();
@@ -169,7 +169,7 @@ class Select extends React.Component {
             options.forEach((value, i) => {
                 if (typeof value != 'object') {
                     value = {
-                        text: value
+                        text: value,
                     };
                     options[i] = value;
                 }
@@ -212,7 +212,7 @@ class Select extends React.Component {
             inline: this.props.inline,
             error: this.state.error,
             empty: this.state.empty,
-            animate: this.props.animation
+            animate: this.props.animation,
         });
         var wrapperStyle = {
             width: this.props.inline ? this.props.width : false,
@@ -220,7 +220,7 @@ class Select extends React.Component {
         var selectClasses = classnames({
             select: true,
             open: this.state.open,
-            onTop: this.state.onTop
+            onTop: this.state.onTop,
         });
         var optionsNumber = this.state.options.length - (this.state.placeholder && this.props.required ? 1 : 0);
         var height = !this.state.open ? this.props.height : Math.min(optionsNumber * this.props.height, 5 * this.props.height);
@@ -255,7 +255,7 @@ class Select extends React.Component {
             content = this.state.options.map((option, key) => {
                 var classes = classnames({
                     selected: this.state.selected.key == key,
-                    hidden: option.placeholder && this.props.required
+                    hidden: option.placeholder && this.props.required,
                 });
 
                 return (

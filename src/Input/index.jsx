@@ -44,7 +44,7 @@ class Input extends React.Component {
         onChange: () => { },
         onBlur: () => { },
         onFocus: () => { },
-        validator: Input.defaultValidator
+        validator: Input.defaultValidator,
     }
     static defaultValidator(inputValue, options) {
         if (typeof inputValue != 'string') {
@@ -54,7 +54,7 @@ class Input extends React.Component {
         if (inputValue.length == 0 && options.required && inputValue.trim().length == 0) {
             return {
                 message: options.message || 'All fields are required',
-                error: true
+                error: true,
             };
         }
 
@@ -77,7 +77,7 @@ class Input extends React.Component {
         this.setState({
             showMessage: typeof message == 'string' ? message.length : message,
             message: message,
-            error: isError
+            error: isError,
         });
     }
     onInput(e) {
@@ -86,7 +86,7 @@ class Input extends React.Component {
         this.props.onInput(input);
 
         var newState = {
-            value: input
+            value: input,
         };
 
         if (this.props.validateOnInput) {
@@ -98,7 +98,7 @@ class Input extends React.Component {
     onFocus(e) {
         if (this.state.value === undefined) {
             this.setState({
-                value: ''
+                value: '',
             });
         }
         this.props.onFocus(e);
@@ -110,7 +110,7 @@ class Input extends React.Component {
             this.props.onChange(validatedValue);
 
             this.setState({
-                lastInput: validatedValue
+                lastInput: validatedValue,
             });
         }
         this.props.onBlur(e);
@@ -119,7 +119,7 @@ class Input extends React.Component {
         var validatorResponse = props.validator(input, {
             required: props.required,
             canTrim: setValue,
-            message: props.message
+            message: props.message,
         }) || {};
 
         if (setValue && validatorResponse.value !== undefined) {
@@ -147,7 +147,7 @@ class Input extends React.Component {
         }
 
         var newState = {
-            attributes: {}
+            attributes: {},
         };
 
         var attributeNames = [
@@ -163,7 +163,7 @@ class Input extends React.Component {
             'readOnly',
             'autoCorrect',
             'tabIndex',
-            'maxLength'
+            'maxLength',
         ];
         for (var i = 0; i < attributeNames.length; i++) {
             var attr = attributeNames[i];
@@ -184,7 +184,7 @@ class Input extends React.Component {
             materialInput: true,
             error: this.state.error,
             showMessage: this.state.showMessage,
-            empty: !this.state.value.length
+            empty: !this.state.value.length,
         });
 
         if (this.state.message) {

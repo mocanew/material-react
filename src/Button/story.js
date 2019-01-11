@@ -13,7 +13,7 @@ stories.add('Knobs', () => {
     const style = select('Style', {
         flat: 'Flat',
         raised: 'Raised',
-        none: 'None'
+        none: 'None',
     }, 'raised').toLowerCase();
 
     return (
@@ -42,7 +42,7 @@ class LoaderButtons extends React.Component {
         super();
 
         this.state = {
-            progress: 0
+            progress: 0,
         };
         this.random = [Math.random(), Math.random(), Math.random(), Math.random()];
 
@@ -51,7 +51,7 @@ class LoaderButtons extends React.Component {
     updateProgress() {
         var knobValue = this.step;
         this.setState({
-            progress: ((this.state.progress + knobValue) % 100 + (knobValue == 0 ? 0 : 1))
+            progress: ((this.state.progress + knobValue) % 100 + (knobValue == 0 ? 0 : 1)),
         });
     }
     componentWillUnmount() {
@@ -64,13 +64,13 @@ class LoaderButtons extends React.Component {
             range: true,
             min: 0,
             max: 100,
-            step: 0.1
+            step: 0.1,
         });
         this.speed = number('Update interval', 1000, {
             range: true,
             min: 0,
             max: 1000,
-            step: 0.1
+            step: 0.1,
         });
 
         if (this.timeout) {
@@ -126,7 +126,7 @@ class StressTest extends React.Component {
     constructor() {
         super();
         this.state = {
-            i: 1
+            i: 1,
         };
     }
     componentDidMount() {
@@ -139,7 +139,7 @@ class StressTest extends React.Component {
 
         this.interval = setInterval(() => {
             this.setState({
-                i: (this.state.i + 1) % 2
+                i: (this.state.i + 1) % 2,
             });
         }, newProps.interval);
     }
@@ -164,7 +164,7 @@ stories.add('Unmount cleanup test', () => <StressTest interval={number('Frequenc
     range: true,
     min: 100,
     max: 10000,
-    step: 1
+    step: 1,
 })} />);
 
 stories.add('Many buttons', () => {
