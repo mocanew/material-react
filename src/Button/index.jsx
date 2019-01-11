@@ -6,7 +6,6 @@ import './index.scss';
 
 class Button extends React.Component {
     static propTypes = {
-        style: PropTypes.object,
         className: PropTypes.string,
         children: PropTypes.node,
         onClick: PropTypes.func,
@@ -43,7 +42,6 @@ class Button extends React.Component {
         super(props);
         this.state = {
             ripples: [],
-            touchDelta: props.touchDelta
         };
         this.touches = [];
 
@@ -165,7 +163,7 @@ class Button extends React.Component {
                     });
                 }
 
-                if (delta <= this.state.touchDelta) {
+                if (delta <= this.props.touchDelta) {
                     this.props.onClick(e);
                 }
             }
@@ -173,9 +171,23 @@ class Button extends React.Component {
         this.touches = touches;
     }
     render() {
-        var loading = this.props.loading === 0 ? '0' : this.props.loading;
+        let {
+            loading,
+            className,
+            flat,
+            raised,
+            ripple,
+            icon,
+            disabled,
+            wrapperElem,
+            children,
+            touchDelta,
+            ...rest
+        } = this.props;
+
+        loading = this.props.loading === 0 ? '0' : this.props.loading;
+        let indeterminate;
         if (loading) {
-            var indeterminate;
             if (typeof this.props.loading != 'boolean' && !isNaN(Number(this.props.loading))) {
                 indeterminate = false;
             }
@@ -184,13 +196,13 @@ class Button extends React.Component {
             }
         }
 
-        var classes = classnames(this.props.className, 'materialButton', {
-            flat: this.props.flat,
-            raised: this.props.raised,
-            icon: this.props.icon,
-            disabled: this.props.disabled,
+        var classes = classnames(className, 'materialButton', {
+            flat,
+            raised,
+            icon,
+            disabled,
             'materialButton--loading': loading
-        }, this.props.icon, {
+        }, icon, {
                 'materialButton--indeterminate': loading && indeterminate,
                 'materialButton--determinate': loading && !indeterminate
             });
@@ -209,7 +221,7 @@ class Button extends React.Component {
         }
 
         var eventListeners;
-        if (!this.props.disabled) {
+        if (!disabled) {
             eventListeners = {
                 onMouseDown: this.onMouseDown,
                 onMouseUp: this.onMouseUp,
@@ -224,18 +236,18 @@ class Button extends React.Component {
         else {
             eventListeners = {};
         }
-        var Elem = this.props.wrapperElem;
+        const Elem = wrapperElem;
 
         return (
             <Elem
-                style={this.props.style}
                 className={classes}
                 {...eventListeners}
                 ref={(button) => {
                     this.button = button;
-                }}>
+                }}
+                {...rest}>
                 {
-                    this.props.ripple && !this.props.disabled ?
+                    ripple && !disabled ?
                         <RippleController
                             ref={(ripples) => {
                                 this.rippleController = ripples;
@@ -250,9 +262,9 @@ class Button extends React.Component {
                         </div>
                         : null
                 }
-                {this.props.children}
+                {children}
                 {
-                    this.props.icon ?
+                    icon ?
                         <span className="icon">
                             <span className="s1"></span>
                             <span className="s2"></span>
