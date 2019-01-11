@@ -150,11 +150,11 @@ class Checkbox extends React.Component {
         }
         this.touches = touches;
     }
-    componentWillReceiveProps(newProps) {
+    static getDerivedStateFromProps(newProps) {
         if (newProps.checked !== undefined) {
-            this.setState({
+            return {
                 checked: newProps.checked
-            });
+            };
         }
     }
     render() {

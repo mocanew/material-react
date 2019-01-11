@@ -36,15 +36,19 @@ var exp = {
                         loader: 'babel-loader',
                         options: {
                             plugins: [
-                                'syntax-async-functions',
-                                'transform-regenerator',
-                                'transform-class-properties',
-                                'transform-object-rest-spread'
+                                'react-hot-loader/babel',
+                                '@babel/proposal-class-properties',
+                                '@babel/proposal-optional-chaining',
                             ],
                             presets: [
-                                'es2015',
-                                'react'
-                            ]
+                                ['@babel/preset-env', {
+                                    'targets': {
+                                        'browsers': ['last 2 versions'],
+                                    },
+                                    'modules': false,
+                                }],
+                                '@babel/react',
+                            ],
                         }
                     }
                 ]

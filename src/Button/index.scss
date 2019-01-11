@@ -11,6 +11,7 @@
     background: rgba($black, 0);
     outline: 0;
     transition: background 0.3s, box-shadow 0.3s;
+    -moz-user-select: none;
     user-select: none;
 
     > span {

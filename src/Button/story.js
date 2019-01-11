@@ -10,11 +10,11 @@ var stories = storiesOf('Button', module);
 stories.addDecorator(withKnobs);
 
 stories.add('Knobs', () => {
-    var style = select('Style', {
+    const style = select('Style', {
         flat: 'Flat',
         raised: 'Raised',
         none: 'None'
-    }, 'raised');
+    }, 'raised').toLowerCase();
 
     return (
         <div>
