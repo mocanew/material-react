@@ -39,6 +39,7 @@ var exp = {
                                 'react-hot-loader/babel',
                                 '@babel/proposal-class-properties',
                                 '@babel/proposal-optional-chaining',
+                                "@babel/plugin-proposal-export-default-from",
                             ],
                             presets: [
                                 ['@babel/preset-env', {
