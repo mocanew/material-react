@@ -17,12 +17,12 @@ stories.add('Knobs', () => {
     );
 });
 
-stories.add('Many buttons', () => {
+stories.add('Many checkboxes', () => {
     var list = [];
     for (var i = 0; i < 1000; i++) {
         if (i % 2 == 0) {
             list.push(
-                <Checkbox value={!!(i % 2)} key={i * 3} />
+                <Checkbox checked={!!(i % 2)} key={i * 3} />
             );
             list.push(<br key={i * 3 + 1} />);
             list.push(<br key={i * 3 + 2} />);

@@ -10,8 +10,6 @@ class Checkbox extends React.Component {
         className: PropTypes.string,
         children: PropTypes.node,
         onCheck: PropTypes.func,
-        raised: PropTypes.bool,
-        flat: PropTypes.bool,
         ripple: PropTypes.bool,
         disabled: PropTypes.bool,
         wrapperElem: PropTypes.node,
@@ -19,11 +17,8 @@ class Checkbox extends React.Component {
         checked: PropTypes.bool,
     }
     static defaultProps = {
-        checked: true,
         wrapperElem: 'div',
         ripple: true,
-        flat: false,
-        raised: false,
         onCheck: () => { },
     }
     static getTouchIDs(touches) {
@@ -150,10 +145,11 @@ class Checkbox extends React.Component {
         }
         this.touches = touches;
     }
-    static getDerivedStateFromProps(newProps) {
-        if (newProps.checked !== undefined) {
+    static getDerivedStateFromProps(newProps, state) {
+        if (newProps.checked !== undefined && newProps.checked != state.lastCheckedProp) {
             return {
                 checked: newProps.checked,
+                lastCheckedProp: newProps.checked,
             };
         }
     }
