@@ -249,15 +249,12 @@ class Button extends React.Component {
                     this.button = button;
                 }}
                 {...rest}>
-                {
-                    ripple && !disabled ?
-                        <RippleController
-                            ref={(ripples) => {
-                                this.rippleController = ripples;
-                            }}
-                        />
-                        : null
-                }
+                <RippleController
+                    disabled={!ripple || disabled}
+                    ref={(ripples) => {
+                        this.rippleController = ripples;
+                    }}
+                />
                 {
                     loading ?
                         <div className="materialButton__loader">

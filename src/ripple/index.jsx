@@ -6,9 +6,11 @@ import './index.scss';
 class RippleController extends React.PureComponent {
     static propTypes = {
         rippleDuration: PropTypes.number,
+        disabled: PropTypes.bool,
     }
     static defaultProps = {
         rippleDuration: 1000,
+        disabled: false,
     }
     static defaultRipple = {
         id: undefined,
@@ -121,6 +123,9 @@ class RippleController extends React.PureComponent {
     }
     startRippleAt(options) {
         var x, y;
+        if (this.props.disabled) {
+            return;
+        }
 
         var rect = options.parent.getBoundingClientRect();
         if (options.size) {
